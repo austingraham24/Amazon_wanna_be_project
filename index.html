@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>arg12c Test Blog</title>
+		<!--from jquery.com-->
+		<script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
+		<script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+		<!-- Latest compiled and minified CSS --> <!-- Copied from bootstrap.com-->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+		<!-- local stylesheet-->
+		<link href="css/style.css" rel="stylesheet" />
+
+		<!--bootstrap blog example css-->
+		<link rel="stylesheet" src="http://getbootstrap.com/examples/blog/blog.css">
+
+		<!-- Latest compiled and minified JavaScript --><!--also copied from bootstrap.com-->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+	</head>
+	<body role="document">
+	    <!-- Fixed navbar--><!--taken from a bootstrap.com theme example and modified-->
+	    <nav class="navbar navbar-inverse navbar-static-top">
+	      <div class="container">
+	        <div class="navbar-header">
+	          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+	            <span class="sr-only">Toggle navigation</span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	          </button>
+	          <a class="navbar-brand" href="#">arg12c Test Blog</a>
+	        </div>
+	        <div id="navbar" class="navbar-collapse collapse">
+	          <ul class="nav navbar-nav">
+	            <li class="active"><a href="#">Home</a></li>
+	            <li><a href="#">Game News</a></li>
+	            <li><a href="#">Project Highlights</a></li>
+	            <li><a href="#">Contact</a></li>
+	            <li class="dropdown">
+	              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Supporters <span class="caret"></span></a>
+	              <ul class="dropdown-menu">
+	                <li><a href="#">Supporter 1</a></li>
+	                <li><a href="#">Supporter 2</a></li>
+	              </ul>
+	            </li>
+	          </ul>
+	        </div><!--/.nav-collapse -->
+	      </div>
+	    </nav>
+	    <!--end nav section-->
+
+		<div class="container">
+	    	<!--taken from the bootstrap blog example-->
+		    <div class="blog-header">
+		      <h1 class="blog-title">My Example Blog</h1>
+		      <p class="lead blog-description">Utilizing the Bootstrap Blog Elements and Classes.</p>
+		    </div>
+
+		    <div class="row" role="main">
+
+		        <div class="col-sm-8 blog-main">
+
+			        <section class="blog-post">
+			          <h2 class="blog-post-title">Sample blog post</h2>
+			          <p class="blog-post-meta">January 1, 2016 by <a href="#">Austin</a></p>
+
+			          <img class="blog-image" src="img/global_game_jam_logo.jpg" width="200px" align="left"/>
+			          <p>This is blog post 1 accompanied by an image. This post is about the Global Game Jam happening Jan. 29.</p>
+			          <p>Begin Nonsense:
+			          	Blee, blinkdorf, purple, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p><!--from lipsum.com-->
+				    </section><br/>
+
+				    <section class="blog-post">
+			          <h2 class="blog-post-title">Sample blog post 2</h2>
+			          <p class="blog-post-meta">January 1, 2015 by <a href="#">Unknown</a></p>
+
+			          <img class="blog-image" src="img/gemMine.png" width="200px" align="right"/>
+			          <p>Begin Nonsense:
+			          	Blee, blinkdorf, purple, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p><!--from lipsum.com-->
+			          	<p>Begin Nonsense:
+			          	Blee, blinkdorf, purple, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
+				    </section>
+			    </div>
+
+			    <!--taken directly from the blog example and modified-->
+			    <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+          <div class="sidebar-module sidebar-module-inset">
+            <div id="author-blurb">
+            	<img id="profile-image" src="img/profile.png" align="left"/>
+            	<h2 id="name" align="left">Austin Graham</h2>
+            </div><br/>
+            <h4>About</h4>
+            <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+          </div>
+          <div class="sidebar-module">
+            <h4>Archives</h4>
+            <ol class="list-unstyled">
+              <li><a href="#">November 2015</a></li>
+              <li><a href="#">December 2015</a></li>
+              <li><a href="#">January 2016</a></li>
+            </ol>
+          </div>
+        </div><!-- /.blog-sidebar -->
+
+			</div> <!--end div row-->
+
+		</div> <!--end div container-->
+
+		<footer class="footer"> <!-- take from footer example-->
+	      <div class="container">
+	        <p>Footer of Blog</p>
+	      </div>
+	    </footer>
+
+	</body>
+</html>
