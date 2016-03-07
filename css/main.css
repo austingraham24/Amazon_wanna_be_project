@@ -1,0 +1,72 @@
+/*.myContainer {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+*/
+
+.navbar{
+  margin:0px;
+}
+
+.navbar-inverse{
+  background-image: linear-gradient(to bottom,#0F2310 0,#000 100%);
+}
+
+.index-main {
+
+    background-image: url(../images/shady-forest.jpg);
+    /*background-image: url(../images/forest1.jpg);*/
+    background-size: 100%;
+    padding-top: 20%;
+    padding-bottom: 25%;
+    color: white;
+    margin-bottom:-70px;
+}
+
+.sign-up-container {
+
+    background-color: rgba(25,25,25,.90);
+    text-align: center;
+    border-radius: 20px;
+    width:60%;
+}
+
+.footer{
+  margin-bottom:10px;
+}
+
+.footer-container{
+  width:50%;
+  border-radius: 10px;
+  padding-top:10px;
+  padding-bottom:5px;
+  color:rgba(220,220,220,1);
+  background-color:rgba(25,25,25,.8);
+  font-size:1.5em;
+  text-align: center;
+}/*
+
+.text {
+    opacity: 1;
+    color: white;
+}
+
+.nav {
+    font-size: 125%;
+}
+
+.cd-user-modal {
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+ 
+.cd-user-modal.is-visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+a {
+    text-decoration: none !important;
+}*/
