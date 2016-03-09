@@ -1,3 +1,35 @@
+<?php
+
+//connect to database
+$link = new mysqli("localhost","root","","amazon_db");
+if ($link->connect_errno) {
+    printf("Connect failed: %s\n", $link->connect_error);
+    exit();
+}
+
+if(isset($_REQUEST["action"]))
+	$action = $_REQUEST["action"];
+else
+	$action = "none";
+
+
+//read in text file if the book table is empty
+//help with reading in text file to database from http://forums.phpfreaks.com/topic/184172-inserting-data-into-a-mysql-table-from-a-text-file-using-php/
+$result = $link->query("SELECT count(title) FROM book");
+if($result == 0)
+{
+	$file = "book_list.txt";
+	$lines = explode("\n", $file);
+	$lines = array_map("trim", $lines, array_fill(0, count($lines), " \n\r\t"));
+	foreach($lines as $line){
+	$names = explode(':', $line);
+  	$user = $names[0];
+  	$first = $names[1];
+  	$last = $names[2];
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>

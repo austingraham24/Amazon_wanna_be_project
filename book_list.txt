@@ -1,0 +1,14 @@
+0618574948, The Fellowship of the Ring, J.R.R. Tolkien, Fiction, In ancient times the Rings of Power were crafted by the Elvensmiths and Sauron who forged the One Ring and filled it with his own power so that he could rule all others.;
+0618574956, The Two Towers, J.R.R. Tolkien, Fiction, With Gandalf dead the journey of the One Ring is in peril as the Fellowship splits up with Frodo and Sam getting closer to Mordor while Aragorn slowly realizes his own destiny.;
+0618574972, The Return of the King, J.R.R. Tolkien, Fiction, The amazing story reaches its climax as Frodo and Sam go deeper into Mordor while Aragorn and Gandalf defend the last bastion of mankind from the dark forces of Sauron.;
+0441013597, Dune, Frank Herbert, Fiction, A vast empire hangs on the precious and unique commodity know as the "spice" which is only found on the remote planet of Dune.;
+0441104029, Children of Dune, Frank Herbert, Fiction, The twin son and daughter of Paul Atreides come of age as they realize their power and their father's true nature.;
+1470184788, Dark Night of the Soul, St. John of the Cross, Christian Living, Faith and doubt collide in this classic work by one of Christianity's most celebrated mystics.;
+0687650194, Prayers for a Privileged People, Walter Brueggemann, Christian Living, A beautiful collection of poetic and prophetic prayers to be prayed and pondered and savored and be challenged by.;
+0464832557, The Hunger Games, Suzanne Collins, Fiction, Two heroes battle their way through the brutal and nationally televised hunger games in order to win their freedom and stay alive.;
+0451458737, The Peshawar Lancers, S.M. Sterling, Fiction, The British Empire still lives on in an alternate reality where the northern hemisphere was obliterated by a comet and the center of the world becomes the former crown colony of India.;
+1453606122, Autobiography of Benjamin Franklin, Benjamin Franklin, Autobiography, The life and times of one of the most important early American patriots.;
+0465067107, The Design of Everyday Things, Donald A. Norman, Engineering, This book could forever change how you experience and interact with your physical surroundings.;
+1414334907, Left Behind, Tim LaHaye, Fiction, A laughable book with a popularized and poorly informed reading of Revelation - oops...I mean it's a riveting book about the "end times"!;
+1613821743, The Art of War, Sun Tzu, Military Strategy, The Art of War is the Swiss army knife of military theory--pop out a different tool for any situation.;
+1595550789, The Total Money Makeover, Dave Ramsey, Personal Finance, This award-winning author teaches you everything you need to know about handling your money wisely and living a debt-free life.;

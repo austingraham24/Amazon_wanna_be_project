@@ -1,3 +1,15 @@
+<?php
+
+$link = new mysqli("localhost","root","","amazon_db");
+if ($link->connect_errno) 
+{
+    printf("Connect failed: %s\n", $link->connect_error);
+    exit();
+}
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>

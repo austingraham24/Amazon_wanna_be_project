@@ -1,7 +1,9 @@
 <?php
 
+//connect to database
 $link = new mysqli("localhost","root","","amazon_db");
-if ($link->connect_errno) {
+if ($link->connect_errno) 
+{
     printf("Connect failed: %s\n", $link->connect_error);
     exit();
 }
@@ -10,6 +12,27 @@ if(isset($_REQUEST["action"]))
 	$action = $_REQUEST["action"];
 else
 	$action = "none";
+
+
+//read in text file if the book table is empty
+//help with reading in text file to database from http://forums.phpfreaks.com/topic/184172-inserting-data-into-a-mysql-table-from-a-text-file-using-php/
+$result = $link->query("SELECT count(title) FROM book");
+$row = $result->fetch_assoc();
+if($row["count(title)"] == 0)
+{
+	//file to string from http://php.net/manual/en/function.file-get-contents.php
+	$file = file_get_contents("book_list.txt");
+	$list = explode(";", $file);
+	$count = count($list);
+	$i=0;
+	while($i<$count-1)
+	{
+  		$line= explode(",", $list[$i]);
+  		$sql = $link->query("INSERT INTO book(isbn, title, author, category, summary) 
+  			VALUES ('".$line[0]."', '".$line[1]."', '".$line[2]."', '".$line[3]."', '".$line[4]."') ");
+  		$i++;
+  	}
+}
 
 ?>
 
@@ -33,27 +56,6 @@ else
 		<!-- local stylesheet-->
 		<link href="css/main.css" rel="stylesheet" />
 
-		<script>
-			function allowDrop(ev) {
-				ev.preventDefault();
-			}
-
-			function drag(ev) {
-				ev.dataTransfer.setData("text", ev.target.id);
-			}
-
-			function drop(ev) {
-				ev.preventDefault();
-				var data = ev.dataTransfer.getData("text");
-				alert(data);
-				
-				$.ajax({url: "ajax.php?id=1&book="+data, success: function(result){
-					alert("Success!");
-				}});
-			
-			}
-		</script>
-
 	</head>
 	<body role="document">
 	    <!-- Fixed navbar--><!--taken from a bootstrap.com theme example and modified-->
@@ -68,10 +70,6 @@ else
 	          </button>
 	          <a class="navbar-brand" href="#">McGonagall Books</a>
 	        </div>
-	        <a href="list.html" class="btn btn-default">
-	        	<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true" ondrop="drop(event)" ondragover="allowDrop(event)"></span>
-	        	<!-- icon from http://glyphicons.com/ -->
-	        </a>
 	        <div id="navbar" class="navbar-collapse collapse">
 	          <ul class="nav navbar-nav pull-right">
                 <li role="presentation"><a class="cd-signin" href="#0"> Log In</a></li>
@@ -83,32 +81,16 @@ else
 	    <!--end nav section-->
 
 		<!--<div class="container">-->
-		<div class="main">
-            <div class="container main-container">
-                <h1>Test Main Page</h1>
+			<div class="main index-main">
+            <div class="container sign-up-container">
+                <div class="text main-nav">
+                    <h1>McGonagall Books</h1> 
+                    <h4>The Book Shop with a Particular Proclivity for Pleasant Reads</h4>
+                    <p class="lead "></p>
+                    <p><a class="btn btn-lg btn-success cd-signin" href="#0" role="button">Sign Up Today!</a></p>
+                </div>
             </div>
-        	<div id=list>
-        		<?php 
-					$result = $link->query("SELECT * FROM book");
-					$i=0;
-					while($row = $result->fetch_assoc()):
-						$title = $row["title"];
-						$id = $row["id"];
-						$cat = $row["category"];
-						$auth = $row["author"];?>
-						<form name="approve" method="post" action="mod.php">
-							<p>
-								<img src="images/sample.jpg" id="<?php echo $row["id"] ?>" display="inline" draggable="true" ondragstart="drag(event)"></div>
-								<?php print "<div id='title' name='title'><a href='book.php?id=$id'>$title</a></div>"; 
-								print "<div id='author' name='author'>$auth</div>";
-								print "<div id='category' name='category'>$cat</div>";?>
-							</p>
-						</form>
-						<?php 
-						$i++;
-					endwhile;
-				?>
-			</div>
+        </div>
 
           <!--<div class="sidebar-module">
             <h4>Archives</h4>
