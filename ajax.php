@@ -3,7 +3,7 @@
 	//===========================
 	//	Database connections
 	//===========================	
-	$mysqli = new mysqli('localhost', 'root', '', 'users'); //host, username, password, DB
+	$mysqli = new mysqli('localhost', 'root', '', 'amazon_db'); //host, username, password, DB
 
 	if ($mysqli->connect_error) {
 		die('Connect Error (' . $mysqli->connect_errno . ') '
@@ -14,20 +14,24 @@
 	$response = "";
 	
 	$id = $mysqli->real_escape_string($_GET["id"]);
-	$book = $mysqli->real_escape_string($_GET["book"]);
+	$user = $mysqli->real_escape_string($_GET["user"]);
 	
-	$result = $mysqli->query("SELECT * FROM shopping_cart WHERE id='".$id."'");
+	$result = $mysqli->query("SELECT * FROM shopping_cart WHERE user_id='".$user."'");
 	if(!$result)
 		$response = "Can't use query last name because: " . $mysqli->connect_errno . ':' . $mysqli->connect_error;
 	else
 	{
 		$row = mysqli_fetch_assoc($result);
-		$cart = $row["cart"];
-		$cart .= ",$book";
-		$result = $mysqli->query("UPDATE shopping_cart SET shopping_cart='".$cart."' WHERE id='".$id."'");
+		$cart = $row["book_id"];
+		if($cart == "0")
+			$cart .= "$id";
+		else
+			$cart .= ",$id";
+		print $cart;
+		$result = $mysqli->query("UPDATE shopping_cart SET book_id='".$cart."' WHERE user_id='".$user."'");
 	}
 
-
+	print "success";
 	print $response;
 
 ?>

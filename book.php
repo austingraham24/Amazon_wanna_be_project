@@ -7,7 +7,7 @@ if ($link->connect_errno)
     exit();
 }
 
-
+$book_id = $_GET['id'];
 
 ?>
 <!DOCTYPE html>
@@ -56,8 +56,24 @@ if ($link->connect_errno)
 
 		<!--<div class="container">-->
 		<div class="main">
+			<?php
+				$result = $link->query("SELECT * FROM book WHERE id='$book_id'");
+				$row = $result->fetch_assoc(); 
+				$title = $row["title"];
+				$author = $row["author"];
+				$category = $row["category"];
+				$isbn = $row["isbn"];
+				$summary = $row["summary"];
+			?>
             <div class="container main-container">
-                <h1>Test Main Page</h1>
+                <h1><?php echo $title ?></h1>
+                <h3>By: <?php echo $author ?></h3>
+            </div>
+            <div name="book info">
+            	<article>
+            		ISBN: <?php echo $isbn ?><br/>
+            		Summary: <?php echo $summary ?><br/>
+            	</article>
             </div>
         </div>
 

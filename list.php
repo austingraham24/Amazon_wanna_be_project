@@ -1,18 +1,17 @@
 <?php
 
 $link = new mysqli("localhost","root","","amazon_db");
-if ($link->connect_errno) {
+if ($link->connect_errno) 
+{
     printf("Connect failed: %s\n", $link->connect_error);
     exit();
 }
 
-if(isset($_REQUEST["action"]))
-	$action = $_REQUEST["action"];
-else
-	$action = "none";
+$result = $link->query("SELECT * FROM shopping_cart");
+$row = $result->fetch_assoc();
+$list = explode(",", $row["book_id"]);
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -33,24 +32,6 @@ else
 		<!-- local stylesheet-->
 		<link href="css/main.css" rel="stylesheet" />
 
-		<script>
-			function allowDrop(ev) {
-				ev.preventDefault();
-			}
-
-			function drag(ev) {
-				ev.dataTransfer.setData("text", ev.target.id);
-			}
-
-			function drop(ev) {
-				ev.preventDefault();
-				var data = ev.dataTransfer.getData("text");
-				var data2 = 1;
-				$.ajax({url: "ajax.php?id="+data+"&user="+data2, success: function(result){
-				}});
-			}
-		</script>
-
 	</head>
 	<body role="document">
 	    <!-- Fixed navbar--><!--taken from a bootstrap.com theme example and modified-->
@@ -65,10 +46,6 @@ else
 	          </button>
 	          <a class="navbar-brand" href="#">McGonagall Books</a>
 	        </div>
-	        <a href="list.html" class="btn btn-default">
-	        	<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true" ondrop="drop(event)" ondragover="allowDrop(event)"></span>
-	        	<!-- icon from http://glyphicons.com/ -->
-	        </a>
 	        <div id="navbar" class="navbar-collapse collapse">
 	          <ul class="nav navbar-nav pull-right">
                 <li role="presentation"><a class="cd-signin" href="#0"> Log In</a></li>
@@ -82,30 +59,31 @@ else
 		<!--<div class="container">-->
 		<div class="main">
             <div class="container main-container">
-                <h1>Test Main Page</h1>
+                <h1>Your Cart</h1>
             </div>
-        	<div id=list>
-        		<?php 
-					$result = $link->query("SELECT * FROM book");
-					$i=0;
-					while($row = $result->fetch_assoc()):
-						$title = $row["title"];
-						$id = $row["id"];
-						$cat = $row["category"];
-						$auth = $row["author"];?>
-						<form name="approve" method="post">
-							<p>
-								<img src="images/sample.jpg" id="<?php echo $row["id"] ?>" display="inline" draggable="true" ondragstart="drag(event)"></div>
-								<?php print "<div id='title' name='title'><a href='book.php?id=$id'>$title</a></div>"; 
-								print "<div id='author' name='author'>$auth</div>";
-								print "<div id='category' name='category'>$cat</div>";?>
-							</p>
-						</form>
-						<?php 
-						$i++;
-					endwhile;
-				?>
-			</div>
+            <div name="books in cart">
+            	<?php 
+            	foreach($list as $arr)
+            	{
+            		$result = $link->query("SELECT * FROM books WHERE id='$arr'");
+            		//$row = $result->fetch_assoc();
+            		print $result;
+            		$id = $row["id"];
+            		$title = $row["title"];
+            		$auth = $row["author"];
+            		$cat = $row["category"];
+            		print "<form name='approve' method='post'>";
+						print "<p>";
+							print "<img src='images/sample.jpg' id='$id' display='inline'></div>";
+							print "<div id='title' name='title'><a href='book.php?id=$id'>$title</a></div>"; 
+							print "<div id='author' name='author'>$auth</div>";
+							print "<div id='category' name='category'>$cat</div>";
+						print "</p>";
+					print "</form>";
+				}
+				 ?>
+            </div>
+        </div>
 
           <!--<div class="sidebar-module">
             <h4>Archives</h4>
