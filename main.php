@@ -1,3 +1,20 @@
+<?php
+
+$link = new mysqli("localhost","root","","amazon_db");
+if ($link->connect_errno) {
+    printf("Connect failed: %s\n", $link->connect_error);
+    exit();
+}
+
+if(isset($_REQUEST["action"]))
+	$action = $_REQUEST["action"];
+else
+	$action = "none";
+
+//if($action == "")
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -18,6 +35,27 @@
 		<!-- local stylesheet-->
 		<link href="css/main.css" rel="stylesheet" />
 
+		<script>
+			function allowDrop(ev) {
+				ev.preventDefault();
+			}
+
+			function drag(ev) {
+				ev.dataTransfer.setData("text", ev.target.id);
+			}
+
+			function drop(ev) {
+				ev.preventDefault();
+				var data = ev.dataTransfer.getData("text");
+				alert(data);
+				
+				$.ajax({url: "ajax.php?id=1&book="+data, success: function(result){
+					alert("Success!");
+				}});
+			
+			}
+		</script>
+
 	</head>
 	<body role="document">
 	    <!-- Fixed navbar--><!--taken from a bootstrap.com theme example and modified-->
@@ -32,10 +70,13 @@
 	          </button>
 	          <a class="navbar-brand" href="#">McGonagall Books</a>
 	        </div>
+	        <a href="list.html" class="btn btn-default">
+	        	<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true" ondrop="drop(event)" ondragover="allowDrop(event)"></span>
+	        	<!-- icon from http://glyphicons.com/ -->
+	        </a>
 	        <div id="navbar" class="navbar-collapse collapse">
 	          <ul class="nav navbar-nav pull-right">
-                <li role="presentation"><a class="cd-signin" href="#0"> Welcome, ---</a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-star" style="align:center;">Wish List</a></li>
+                <li role="presentation"><a class="cd-signin" href="#0"> Log In</a></li>
 
 	          </ul>
 	        </div><!--/.nav-collapse -->
@@ -47,24 +88,25 @@
 		<div class="main">
             <div class="container main-container">
                 <h1>Test Main Page</h1>
-                 <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Star
             </div>
-        </div>
-        <?php 
-			$result = $link->query("SELECT * FROM book");
-			$i=0;
-			while($row = $result->fetch_assoc()):?>
-				<form name="approve" method="post" action="mod.php">
-					<p>
-						<img src="" id="image" value="<?php echo $row["id"] ?>"></div>
-						<div id="title" name="title"><a href="list.php"><?php echo $row["title"]?></a></div>
-						<div id="author" name="author"><?php echo $row["author"]?></div>
-					</p>
-				</form>
-				<?php 
-				$i++;
-			endwhile;
-		?>
+        	<div id=list>
+        		<?php 
+					$result = $link->query("SELECT * FROM book");
+					$i=0;
+					while($row = $result->fetch_assoc()):?>
+						<form name="approve" method="post" action="mod.php">
+							<p>
+								<img src="images/sample.jpg" id="<?php echo $row["id"] ?>" display="inline" draggable="true" ondragstart="drag(event)"></div>
+								<div id="title" name="title"><a href="book.php"><?php echo $row["title"]?></a></div>
+								<div id="author" name="author"><?php echo $row["author"]?></div>
+								<div id="category" name="category"><?php echo $row["category"]?></div>
+							</p>
+						</form>
+						<?php 
+						$i++;
+					endwhile;
+				?>
+			</div>
 
           <!--<div class="sidebar-module">
             <h4>Archives</h4>

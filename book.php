@@ -34,8 +34,7 @@
 	        </div>
 	        <div id="navbar" class="navbar-collapse collapse">
 	          <ul class="nav navbar-nav pull-right">
-                <li role="presentation"><a class="cd-signin" href="#0"> Welcome, ---</a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-star" style="align:center;">Wish List</a></li>
+                <li role="presentation"><a class="cd-signin" href="#0"> Log In</a></li>
 
 	          </ul>
 	        </div><!--/.nav-collapse -->
@@ -47,24 +46,8 @@
 		<div class="main">
             <div class="container main-container">
                 <h1>Test Main Page</h1>
-                 <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Star
             </div>
         </div>
-        <?php 
-			$result = $link->query("SELECT * FROM book");
-			$i=0;
-			while($row = $result->fetch_assoc()):?>
-				<form name="approve" method="post" action="mod.php">
-					<p>
-						<img src="" id="image" value="<?php echo $row["id"] ?>"></div>
-						<div id="title" name="title"><a href="list.php"><?php echo $row["title"]?></a></div>
-						<div id="author" name="author"><?php echo $row["author"]?></div>
-					</p>
-				</form>
-				<?php 
-				$i++;
-			endwhile;
-		?>
 
           <!--<div class="sidebar-module">
             <h4>Archives</h4>
