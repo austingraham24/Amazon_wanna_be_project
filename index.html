@@ -49,6 +49,7 @@ if($result == 0)
 
 		<!-- local stylesheet-->
 		<link href="css/main.css" rel="stylesheet" />
+		<link href="css/modal.css" rel="stylesheet" />
 
 	</head>
 	<body role="document">
@@ -86,19 +87,33 @@ if($result == 0)
             </div>
         </div>
 
-          <!--<div class="sidebar-module">
-            <h4>Archives</h4>
-            <ol class="list-unstyled">
-              <li><a href="#">November 2015</a></li>
-              <li><a href="#">December 2015</a></li>
-              <li><a href="#">January 2016</a></li>
-            </ol>
+        <div id="sign-in-modal" class="sign-in-modal">
+          	<div class="sign-in-modal-container">
+                <ul class="modal-switcher">
+                    <li><a href="#">Sign In</a></li>
+                    <li><a href="#">New Account</a></li>
+                </ul>
+                <div id="modal-login is-selected"> <!-- log in form -->
+                    <form class="modal-form" name="signIn" onsubmit="return validateSignIn()" method="post" action="#">
+                        <p class="fieldset"><input class="full-width has-padding has-border" id="email" name="email" type="email" placeholder="E-mail"></p>
+                        <p class="fieldset"><input class="full-width has-padding has-border" id="password" name="password" type="password"  placeholder="Password"></p>
+                        <p class="fieldset"><input class="full-width" type="submit" value="Login"></p>
+                        <input type="hidden" name="action" value="login">
+                    </form>
+                </div>
+                <div id="modal-signup"> <!-- sign up form -->
+                    <form class="modal-form" name="signUp" onsubmit="return validateSignUp()" method="post" action="#">
+                        <p class="fieldset"><input class="full-width has-padding has-border" id="fname" name="fname" type="text" placeholder="First Name"></p>
+                        <p class="fieldset"><input class="full-width has-padding has-border" id="lname" name="lname" type="text" placeholder="Last Name"></p>
+                        <p class="fieldset"><input class="full-width has-padding has-border" id="email" name="email" type="email" placeholder="E-mail"></p>
+                        <p class="fieldset"><input class="full-width has-padding has-border" id="password" name="password" type="password"  placeholder="Password"></p>
+                        <p class="fieldset"><input class="full-width has-padding has-border" id="password2" name="password2" type="password"  placeholder="Retype Password"></p>
+                        <p class="fieldset"><input class="full-width has-padding" type="submit" value="Create Account"></p>
+                        <input type="hidden" name="action" value="add_user">
+                    </form>
+                </div>
+            </div>
           </div>
-        <!--</div><!-- /.blog-sidebar -->
-
-			</div> <!--end div row-->
-
-		</div> <!--end div container-->
 
 		<footer class="footer"> <!-- take from footer example-->
 	      <div class="container footer-container">

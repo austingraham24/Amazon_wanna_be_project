@@ -45,6 +45,11 @@
   background-color:rgba(25,25,25,1);
   font-size:1.5em;
   text-align: center;
+}
+
+.nav-badge{
+  color:white;
+  background-color:rgba(25,65,25,1);
 }/*
 
 .text {
