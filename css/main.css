@@ -50,7 +50,21 @@
 .nav-badge{
   color:white;
   background-color:rgba(25,65,25,1);
-}/*
+}
+
+.modal-alert{
+  margin-left:4em;
+  margin-top:2em;
+  margin-right:4em;
+  margin-bottom:0em;
+  text-align:center;
+  background-image: linear-gradient(to bottom,#661400 0,#b61800 100%);
+  border-color:#661400;
+  color:#fff;
+  //display:none;
+}
+
+/*
 
 .text {
     opacity: 1;

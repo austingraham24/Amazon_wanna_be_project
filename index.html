@@ -1,4 +1,4 @@
-<?php
+<!--<?php
 
 //connect to database
 $link = new mysqli("localhost","root","","amazon_db");
@@ -28,7 +28,7 @@ if($result == 0)
   	$last = $names[2];
 }
 
-?>
+?>-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -67,7 +67,7 @@ if($result == 0)
 	        </div>
 	        <div id="navbar" class="navbar-collapse collapse">
 	          <ul class="nav navbar-nav pull-right">
-                <li role="presentation"><a class="cd-signin" href="#0"> Log In</a></li>
+                <li role="presentation"><a class="site-login" href="#0"> Log In</a></li>
 
 	          </ul>
 	        </div><!--/.nav-collapse -->
@@ -82,7 +82,7 @@ if($result == 0)
                     <h1>McGonagall Books</h1> 
                     <h4>The Book Shop with a Particular Proclivity for Pleasant Reads</h4>
                     <p class="lead "></p>
-                    <p><a class="btn btn-lg btn-success cd-signin" href="#0" role="button">Sign Up Today!</a></p>
+                    <p><a id="join-button" class="btn btn-lg btn-success site-signUp" href="#0" role="button">Sign Up Today!</a></p>
                 </div>
             </div>
         </div>
@@ -93,7 +93,8 @@ if($result == 0)
                     <li><a href="#">Sign In</a></li>
                     <li><a href="#">New Account</a></li>
                 </ul>
-                <div id="modal-login is-selected"> <!-- log in form -->
+                <div id="modal-login"> <!-- log in form -->
+                	<div id="loginError" role="alert" class="alert alert-danger modal-alert">We're sorry. Your username or password did not match our records.</div>
                     <form class="modal-form" name="signIn" onsubmit="return validateSignIn()" method="post" action="#">
                         <p class="fieldset"><input class="full-width has-padding has-border" id="email" name="email" type="email" placeholder="E-mail"></p>
                         <p class="fieldset"><input class="full-width has-padding has-border" id="password" name="password" type="password"  placeholder="Password"></p>
@@ -103,13 +104,13 @@ if($result == 0)
                 </div>
                 <div id="modal-signup"> <!-- sign up form -->
                     <form class="modal-form" name="signUp" onsubmit="return validateSignUp()" method="post" action="#">
-                        <p class="fieldset"><input class="full-width has-padding has-border" id="fname" name="fname" type="text" placeholder="First Name"></p>
-                        <p class="fieldset"><input class="full-width has-padding has-border" id="lname" name="lname" type="text" placeholder="Last Name"></p>
-                        <p class="fieldset"><input class="full-width has-padding has-border" id="email" name="email" type="email" placeholder="E-mail"></p>
-                        <p class="fieldset"><input class="full-width has-padding has-border" id="password" name="password" type="password"  placeholder="Password"></p>
-                        <p class="fieldset"><input class="full-width has-padding has-border" id="password2" name="password2" type="password"  placeholder="Retype Password"></p>
-                        <p class="fieldset"><input class="full-width has-padding" type="submit" value="Create Account"></p>
-                        <input type="hidden" name="action" value="add_user">
+                    	<input type="hidden" name="action" value="add_user">
+                        <p class="fieldset"><label class="modal-label">First Name:</label><input class="modal-input" id="fname" name="fname" type="text" placeholder="First Name"></p>
+                        <p class="fieldset"><label class="modal-label">Last Name:</label><input class="modal-input" id="lname" name="lname" type="text" placeholder="Last Name"></p>
+                        <p class="fieldset"><label class="modal-label">Email:</label><input class="modal-input" id="email" name="email" type="email" placeholder="E-mail"></p>
+                        <p class="fieldset"><label class="modal-label">Password:</label><input class="modal-input" id="password" name="password" type="password"  placeholder="Password"></p>
+                        <p class="fieldset"><label class="modal-label">Enter Password Again:</label><input class="modal-input" id="password2" name="password2" type="password"  placeholder="Retype Password"></p>
+                        <input class="full-width has-padding has-border" type="submit" value="Create Account">
                     </form>
                 </div>
             </div>
@@ -120,6 +121,58 @@ if($result == 0)
 	        <p>McGonagall Books: Castle Ruins, Scotland</p>
 	      </div>
 	    </footer>
+
+	    <script>
+	    	$('#join-button').click(function(event){alert("Hello!");})
+
+	    	var formModal = $('#sign-in-modal'),
+	        formLogin = formModal.find('#modal-login'),
+	        formSignup = formModal.find('#modal-signup'),
+	        //formForgotPassword = formModal.find('#cd-reset-password'),
+	        formModalTab = $('.modal-switcher'),
+	        tabLogin = formModalTab.children('li').eq(0).children('a'),
+	        tabSignup = formModalTab.children('li').eq(1).children('a'),
+	        mainNav = $('.site-login');
+
+
+		    //open sign-up form
+		    ////$('.site-login').on('click', signup_selected);
+		    //open login-form form
+		    $('.site-login').on('click', login_selected);
+
+		    //close modal
+		    formModal.on('click', function(event){
+		        if( $(event.target).is(formModal) || $(event.target).is('.cd-close-form') ) {
+		            formModal.removeClass('is-visible');
+		        }   
+		    });
+
+		    //switch from a tab to another
+		    formModalTab.on('click', function(event) {
+		        event.preventDefault();
+		        ( $(event.target).is( tabLogin ) ) ? login_selected() : signup_selected();
+		    });
+
+		    function login_selected(){
+		        mainNav.children('ul').removeClass('is-visible');
+		        formModal.addClass('is-visible');
+		        formLogin.addClass('is-selected');
+		        formSignup.removeClass('is-selected');
+		        formForgotPassword.removeClass('is-selected');
+		        tabLogin.addClass('selected');
+		        tabSignup.removeClass('selected');
+		    }
+
+		    function signup_selected(){
+		        mainNav.children('ul').removeClass('is-visible');
+		        formModal.addClass('is-visible');
+		        formLogin.removeClass('is-selected');
+		        formSignup.addClass('is-selected');
+		        formForgotPassword.removeClass('is-selected');
+		        tabLogin.removeClass('selected');
+		        tabSignup.addClass('selected');
+		    }
+	    </script>
 
 	</body>
 </html>
