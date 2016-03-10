@@ -64,6 +64,14 @@
   //display:none;
 }
 
+.modal-alert{
+  display: block
+}
+
+.modal-alert.alert-hide{
+  display: none
+}
+
 /*
 
 .text {

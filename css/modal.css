@@ -28,9 +28,10 @@ time, mark, audio, video {
 	overflow-y: auto;
 	visibility: hidden;
 	opacity: 0;
+  transition: opacity 0.3s, visibility 0.3s;
 }
 
-.sign-in-modal .is-visible {
+.sign-in-modal.is-visible {
   visibility: visible;
   opacity: 1;
 }
