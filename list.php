@@ -7,7 +7,8 @@ if ($link->connect_errno)
     exit();
 }
 
-$result = $link->query("SELECT * FROM shopping_cart");
+$user = 1;
+$result = $link->query("SELECT * FROM shopping_cart WHERE user_id = $user");
 $row = $result->fetch_assoc();
 $list = explode(",", $row["book_id"]);
 
@@ -65,21 +66,10 @@ $list = explode(",", $row["book_id"]);
             	<?php 
             	foreach($list as $arr)
             	{
-            		$result = $link->query("SELECT * FROM books WHERE id='$arr'");
-            		//$row = $result->fetch_assoc();
-            		print $result;
-            		$id = $row["id"];
-            		$title = $row["title"];
-            		$auth = $row["author"];
-            		$cat = $row["category"];
-            		print "<form name='approve' method='post'>";
-						print "<p>";
-							print "<img src='images/sample.jpg' id='$id' display='inline'></div>";
-							print "<div id='title' name='title'><a href='book.php?id=$id'>$title</a></div>"; 
-							print "<div id='author' name='author'>$auth</div>";
-							print "<div id='category' name='category'>$cat</div>";
-						print "</p>";
-					print "</form>";
+            		$book = $arr[0];
+            		print $book;
+            		//$result = $link->query("SELECT * FROM books WHERE id='$book'");
+            	
 				}
 				 ?>
             </div>

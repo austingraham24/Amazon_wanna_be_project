@@ -52,8 +52,6 @@ else
 		</script>
 
 	</head>
-	<body role="document">
-	    <!-- Fixed navbar--><!--taken from a bootstrap.com theme example and modified-->
 	    <nav class="navbar navbar-inverse navbar-static-top">
 	      <div class="container">
 	        <div class="navbar-header">
@@ -63,15 +61,13 @@ else
 	            <span class="icon-bar"></span>
 	            <span class="icon-bar"></span>
 	          </button>
-	          <a class="navbar-brand" href="#">McGonagall Books</a>
+	          <a class="navbar-brand" href="index.html">McGonagall Books</a>
 	        </div>
-	        <a href="list.html" class="btn btn-default">
-	        	<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true" ondrop="drop(event)" ondragover="allowDrop(event)"></span>
-	        	<!-- icon from http://glyphicons.com/ -->
-	        </a>
 	        <div id="navbar" class="navbar-collapse collapse">
 	          <ul class="nav navbar-nav pull-right">
-                <li role="presentation"><a class="cd-signin" href="#0"> Log In</a></li>
+                <li role="presentation"><a class="cd-signin" href="#0"> Welcome, ---</a></li>
+                <li><a href="list.php"><span class="glyphicon glyphicon-shopping-cart" style="align:center;" ondrop="drop(event)" ondragover="allowDrop(event)"></span> Cart <span class="badge nav-badge">4</span></a></li>
+                <li><a href="list.php"><span class="glyphicon glyphicon-star" style="align:center;"></span> WishList <span class="badge nav-badge">4</span></a></li>
 
 	          </ul>
 	        </div><!--/.nav-collapse -->
@@ -107,15 +103,19 @@ else
 				?>
 			</div>
 
-          <!--<div class="sidebar-module">
-            <h4>Archives</h4>
-            <ol class="list-unstyled">
-              <li><a href="#">November 2015</a></li>
-              <li><a href="#">December 2015</a></li>
-              <li><a href="#">January 2016</a></li>
-            </ol>
+          <div class="sidebar-module">
+            <h4>Categories</h4>
+            <form name="categories" method="post">
+            	<?php
+            	$result = $link->query("SELECT DISTINCT category FROM book");
+            	while($row = $result->fetch_assoc()):
+            		$go = $row["category"];
+            		print "<div id='row'>$go</div>";
+            	endwhile;
+            	?>
+            </form>
           </div>
-        <!--</div><!-- /.blog-sidebar -->
+        </div><!-- /.blog-sidebar -->
 
 			</div> <!--end div row-->
 
