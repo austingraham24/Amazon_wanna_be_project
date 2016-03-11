@@ -41,6 +41,23 @@ if($action=="go")
 	$rev = $_POST["review"];
 	$rev = htmlentities($link->real_escape_string($rev));
 	$result = $link->query("INSERT INTO review(user_id, book_id, input) VALUES ('$userID', '$book_id', '$rev')");
+}else if($action=="add")
+{
+	$wish = $_POST["book"];
+	$wish = htmlentities($link->real_escape_string($wish));
+	$result = $link->query("SELECT * FROM shopping_cart WHERE user_id='".$userID."'");
+	if(!$result)
+		$response = "Can't use query last name because: " . $link->connect_errno . ':' . $mysqli->connect_error;
+	else
+	{
+		$row = mysqli_fetch_assoc($result);
+		$cart = $row["book_id"];
+		if($cart == "0")
+			$cart = "$wish";
+		else
+			$cart .= ",$wish";
+		$result = $link->query("UPDATE shopping_cart SET book_id='".$cart."' WHERE user_id='".$userID."'");
+	}
 }
 
 ?>
@@ -130,44 +147,53 @@ if($action=="go")
 				$category = $row["category"];
 				$isbn = $row["isbn"];
 				$summary = $row["summary"];
+				$id = $row['id']
 			?>
-            <div class="container main-container">
-            	<img src="images/brownBook.png" width="10%" display="inline-block">
-            	<div display="inline-block">
-	                <h1 ><?php echo $title ?></h1>
-	                <h3>By: <?php echo $author ?></h3>
-            	</div>
-            </div>
-            <div name="book info">
-            	<article>
-            		ISBN: <?php echo $isbn ?><br/>
-            		Summary: <?php echo $summary ?><br/>
-            	</article>
-            </div>
-            <div id="rating" class="book_rating">
-            	<br/>Rate this book!
-            	<div id="rateYo"></div><br/>
+	            <div class="container main-container" style="margin-top:25px;">
+	            	<div style="display:inline-block; width:95px;">
+		            	<img src="images/brownBook.png" width="100%" display="inline">
+		            </div>
+		            <div style="display:inline-block; font-size:18px; margin-left:15px; vertical-align:bottom;">
+		                <h1 ><?php echo $title ?></h1>
+		                <h3>By: <?php echo $author ?></h3>
+		            </div>
+		            <div name="book info">
+		            	<article>
+		            		ISBN: <?php echo $isbn ?><br/>
+		            		Summary: <?php echo $summary ?><br/>
+		            	</article>
+		            	<form name='books' method='post'>
+		            		<?php
+							print "<input type='hidden' name='book' value='$id'/>";
+							print "<input type='hidden' name='action' value='add'/>";
+							print "<button type='submit' class='btn btn-primary'>Add to Cart</button>";?>
+						</form>
+		            </div>
+		            <div id="rating" class="book_rating">
+		            	<br/>Rate this book!
+		            	<div id="rateYo"></div><br/>
+		            	<!--Rating div from http://prrashi.github.io/rateYo/-->
+		            </div>
+		            <form id="yes" method="post" <?php print "action='book.php?id=$book_id'"; ?>>
+						<textarea class="form-control" rows="5" name="review" id="review"></textarea>
+						<p class="help-block">Submit a review for this book!</p>
+						<input type="hidden" name="action" value="go"/>
+						<input type="submit" class="btn btn-primary btn-lg" value="Submit"/>
+					</form>
+	            </div>
 
-
-            </div>
-            <form id="yes" method="post" <?php print "action='book.php?id=$book_id'"; ?>>
-				<textarea class="form-control" rows="5" name="review" id="review"></textarea>
-				<p class="help-block">Submit a review for this book!</p>
-				<input type="hidden" name="action" value="go"/>
-				<p><button type="submit" class="btn btn-primary btn-lg"/>Submit</p>
-			</form>
-
-			<div id="submitted">
-				<!--<?php
+	            <div id="submitted">
+				<?php
 					$result = $link->query("SELECT * FROM review INNER JOIN users ON (review.user_id=users.id) HAVING book_id='$book_id' ORDER BY users.first_name");
 					while($row = $result->fetch_assoc())
 					{
-						$person = $row["users.first_name"];
-						$input = $row["review.input"];
+						$person = $row["first_name"];
+						$last = $row["last_name"];
+						$input = $row["input"];
 						print "<div id='thoughts'>$input</div>";
-						print "<div id='submitted_by'>Review By: $person</div>";
+						print "<div id='submitted_by'>Review By: $person $last</div>";
 					}
-				?>-->
+				?>
 			</div>
         </div>
 
