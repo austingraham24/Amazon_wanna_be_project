@@ -51,13 +51,36 @@ if(isset($_REQUEST["action"]))
 else
 	$action = "none";
 
+if($action=="addWishList")
+{
+	$wish = $_POST["book"];
+	$wish = htmlentities($link->real_escape_string($wish));
+	$result = $link->query("SELECT * FROM wish_list WHERE user_id='".$userID."'");
+	if(!$result)
+		$response = "Can't use query last name because: " . $link->connect_errno . ':' . $link->connect_error;
+	else
+	{
+		$row = mysqli_fetch_assoc($result);
+		if(!$row['book_id']){
+			$result = $link->query("INSERT into wish_list (book_id,user_id) values ($wish, $userID)");
+		}else{
+			$cart = $row["book_id"];
+			if($cart == "0")
+				$cart = "$wish";
+			else
+				$cart .= ",$wish";
+			$result = $link->query("UPDATE wish_list SET book_id='".$cart."' WHERE user_id='".$userID."'");
+		}
+	}
+}
+
 if($action=="add")
 {
 	$wish = $_POST["book"];
 	$wish = htmlentities($link->real_escape_string($wish));
 	$result = $link->query("SELECT * FROM shopping_cart WHERE user_id='".$userID."'");
 	if(!$result)
-		$response = "Can't use query last name because: " . $mysqli->connect_errno . ':' . $mysqli->connect_error;
+		$response = "Can't use query last name because: " . $link->connect_errno . ':' . $mysqli->connect_error;
 	else
 	{
 		$row = mysqli_fetch_assoc($result);
@@ -69,7 +92,6 @@ if($action=="add")
 		$result = $link->query("UPDATE shopping_cart SET book_id='".$cart."' WHERE user_id='".$userID."'");
 	}
 }
-
 
 ?>
 <!DOCTYPE html>
@@ -159,7 +181,7 @@ if($action=="add")
 									print "<div id='author' name='author'>$auth</div>";
 									print "<div id='category' name='category'>$cat</div>";
 									print "<input type='hidden' name='book' value='$id'/>";
-									print "<input type='hidden' name='action' value='add'/>";
+									print "<input type='hidden' name='action' value='addWishList'/>";
 									print "<button type='submit' class='btn btn-primary'>Add to Wishlist</button>";?>
 								</div>
 							</div>
@@ -191,20 +213,26 @@ if($action=="add")
             			$title = $row["title"];
             			$auth = $row["author"];
             			$cat = $row["category"];
-            			print "<form name='add' method='post' action='list.php?cart=0'>";
-							print "<p>";
-								print "<img src='images/sample.jpg' id='$id' display='inline'></div>";
-								print "<div id='title' name='title'><a href='book.php?id=$id'>$title</a></div>"; 
-								print "<div id='author' name='author'>$auth</div>";
-								print "<div id='category' name='category'>$cat</div>";
-								print "<input type='hidden' name='book' value='$id'/>";
-								print "<input type='hidden' name='action' value='add'/>";
-								print "<button type='submit' class='btn btn-primary'>Add to Cart</button>";
-							print "</p>";
-						print "</form>";
+            			?>
+            			<form name='books' method='post'>
+							<div id="bookListing" style="margin-bottom:25px;">
+								<div style="display:inline-block; width:100px;">
+								<img src="images/brownBook.png" id="<?php echo $row["id"] ?>" width="100%" style="vertical-align:bottom;" display="inline" draggable="true" ondragstart="drag(event)">
+								</div>
+								<div style="display:inline-block; font-size:18px; margin-left:15px; vertical-align:bottom;">
+									<?php print "<div id='title' name='title'><a href='book.php?id=$id'>$title</a></div>"; 
+									print "<div id='author' name='author'>$auth</div>";
+									print "<div id='category' name='category'>$cat</div>";
+									print "<input type='hidden' name='book' value='$id'/>";
+									print "<input type='hidden' name='action' value='add'/>";
+									print "<button type='submit' class='btn btn-primary'>Add to Cart</button>";?>
+								</div>
+							</div>
+						</form>
+						<?php
 						$i++;
 					}
-					?>
+					 ?>
             	</div>
             	</div>
         	</div> <?php
