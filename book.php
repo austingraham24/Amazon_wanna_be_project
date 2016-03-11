@@ -109,7 +109,7 @@ if($action=="go")
 	        </div>
 	        <div id="navbar" class="navbar-collapse collapse">
 	          <ul class="nav navbar-nav pull-right">
-                <li role="presentation">Welcome, <?php print($fullname);?></li>
+                <li role="presentation"><a href="#">Welcome, <?php print($fullname);?></a></li>
                 <li><a href="list.php?cart=1"><span class="glyphicon glyphicon-shopping-cart" style="align:center;"></span> Cart <span class="badge nav-badge">4</span></a></li>
                 <li><a href="list.php?cart=0"><span class="glyphicon glyphicon-star" style="align:center;"></span> WishList <span class="badge nav-badge">4</span></a></li>
                 <li><a href="logOut.php">Log Out</a></li>
