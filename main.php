@@ -63,8 +63,6 @@ else
 		</script>
 
 	</head>
-	<body role="document">
-	    <!-- Fixed navbar--><!--taken from a bootstrap.com theme example and modified-->
 	    <nav class="navbar navbar-inverse navbar-static-top">
 	      <div class="container">
 	        <div class="navbar-header">
@@ -123,15 +121,19 @@ else
 				?>
 			</div>
 
-          <!--<div class="sidebar-module">
-            <h4>Archives</h4>
-            <ol class="list-unstyled">
-              <li><a href="#">November 2015</a></li>
-              <li><a href="#">December 2015</a></li>
-              <li><a href="#">January 2016</a></li>
-            </ol>
+          <div class="sidebar-module">
+            <h4>Categories</h4>
+            <form name="categories" method="post">
+            	<?php
+            	$result = $link->query("SELECT DISTINCT category FROM book");
+            	while($row = $result->fetch_assoc()):
+            		$go = $row["category"];
+            		print "<div id='row'>$go</div>";
+            	endwhile;
+            	?>
+            </form>
           </div>
-        <!--</div><!-- /.blog-sidebar -->
+        </div><!-- /.blog-sidebar -->
 
 			</div> <!--end div row-->
 
