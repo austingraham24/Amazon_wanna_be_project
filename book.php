@@ -131,31 +131,33 @@ if($action=="go")
 				$isbn = $row["isbn"];
 				$summary = $row["summary"];
 			?>
-            <div class="container main-container">
-            	<img src="images/brownBook.png" width="10%" display="inline">
-            	<div display="inline">
-	                <h1 ><?php echo $title ?></h1>
-	                <h3>By: <?php echo $author ?></h3>
-            	</div>
-            </div>
-            <div name="book info">
-            	<article>
-            		ISBN: <?php echo $isbn ?><br/>
-            		Summary: <?php echo $summary ?><br/>
-            	</article>
-            </div>
-            <div id="rating" class="book_rating">
-            	<br/>Rate this book!
-            	<div id="rateYo"></div><br/>
+	            <div class="container main-container" style="margin-top:25px;">
+	            	<div style="display:inline-block; width:95px;">
+		            	<img src="images/brownBook.png" width="100%" display="inline">
+		            </div>
+		            <div style="display:inline-block; font-size:18px; margin-left:15px; vertical-align:bottom;">
+		                <h1 ><?php echo $title ?></h1>
+		                <h3>By: <?php echo $author ?></h3>
+		            </div>
+		            <div name="book info">
+		            	<article>
+		            		ISBN: <?php echo $isbn ?><br/>
+		            		Summary: <?php echo $summary ?><br/>
+		            	</article>
+		            </div>
+		            <div id="rating" class="book_rating">
+		            	<br/>Rate this book!
+		            	<div id="rateYo"></div><br/>
 
 
-            </div>
-            <form id="yes" method="post" <?php print "action='book.php?id=$book_id'"; ?>>
-				<textarea class="form-control" rows="5" name="review" id="review"></textarea>
-				<p class="help-block">Submit a review for this book!</p>
-				<input type="hidden" name="action" value="go"/>
-				<p><button type="submit" class="btn btn-primary btn-lg"/>Submit</p>
-			</form>
+		            </div>
+		            <form id="yes" method="post" <?php print "action='book.php?id=$book_id'"; ?>>
+						<textarea class="form-control" rows="5" name="review" id="review"></textarea>
+						<p class="help-block">Submit a review for this book!</p>
+						<input type="hidden" name="action" value="go"/>
+						<input type="submit" class="btn btn-primary btn-lg" value="Submit"/>
+					</form>
+	            </div>
         </div>
 
           <!--<div class="sidebar-module">
