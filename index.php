@@ -8,6 +8,18 @@ if ($link->connect_errno)
     exit();
 }
 
+print($_SESSION);
+
+if(isset($_SESSION)){
+	$email = $_SESSION["user"];
+	$pass = $_SESSION[$email];
+	$result = $link->query("SELECT password FROM users where email='$email'");
+	print($result);
+	if($password == $result[0]){
+		print("yes");
+	}
+}
+
 //read in text file if the book table is empty
 //help with reading in text file to database from http://forums.phpfreaks.com/topic/184172-inserting-data-into-a-mysql-table-from-a-text-file-using-php/
 $result = $link->query("SELECT count(title) FROM book");
@@ -27,14 +39,15 @@ if($row["count(title)"] == 0)
   		$i++;
   	}
 }
-
+$action="";
 if(isset($_REQUEST["action"])){
 	$action = $_REQUEST["action"];
-	print($action);
 }
 else{
 	$action = "none";
 }
+
+
 
 if($action == "add_user")
     {
@@ -48,16 +61,20 @@ if($action == "add_user")
         $email = htmlentities($link->real_escape_string($email));
         $password = htmlentities($link->real_escape_string($password));
         $password = crypt ($password,"Gryfindor");
-        $result = $link->query("INSERT INTO users (firstName,lastName,email,phrase,admin) VALUES ('$fname', '$lname', '$email', '$password', 0)");
+        $result = $link->query("INSERT INTO users (first_name,last_name,email,password) VALUES ('$fname', '$lname', '$email', '$password')");
 
         $loggedIn = true;
+        print($result);
 
         if(!$result)
             die ('Can\'t add user because: ' . $link->error);
         else{
+        	print("Adding");
         	if(!isset($_SESSION)){
 				session_start();
 			}
+			$_SESSION["user"] = $email;
+			$_SESSION[$email] = $password;
             header('Location: main.php');
         }
     }
