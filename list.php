@@ -7,10 +7,47 @@ if ($link->connect_errno)
     exit();
 }
 
+//check if wishlist or cart page, and grab user id
+$page = $_GET["cart"];
 $user = 1;
-$result = $link->query("SELECT * FROM shopping_cart WHERE user_id = $user");
-$row = $result->fetch_assoc();
-$list = explode(",", $row["book_id"]);
+
+if($page == 1)
+{
+	$result = $link->query("SELECT * FROM shopping_cart WHERE user_id = $user");
+	$row = $result->fetch_assoc();
+	$list = explode(",", $row["book_id"]);
+}
+else
+{
+	$result = $link->query("SELECT * FROM wish_list WHERE user_id = $user");
+	$row = $result->fetch_assoc();
+	$list = explode(",", $row["book_id"]);
+}
+
+if(isset($_REQUEST["action"]))
+	$action = $_REQUEST["action"];
+else
+	$action = "none";
+
+if($action=="add")
+{
+	$wish = $_POST["book"];
+	$wish = htmlentities($link->real_escape_string($wish));
+	$result = $link->query("SELECT * FROM shopping_cart WHERE user_id='".$user."'");
+	if(!$result)
+		$response = "Can't use query last name because: " . $mysqli->connect_errno . ':' . $mysqli->connect_error;
+	else
+	{
+		$row = mysqli_fetch_assoc($result);
+		$cart = $row["book_id"];
+		if($cart == "0")
+			$cart = "$wish";
+		else
+			$cart .= ",$wish";
+		$result = $link->query("UPDATE shopping_cart SET book_id='".$cart."' WHERE user_id='".$user."'");
+	}
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -32,6 +69,15 @@ $list = explode(",", $row["book_id"]);
 
 		<!-- local stylesheet-->
 		<link href="css/main.css" rel="stylesheet" />
+
+		<script>
+
+			function add()
+			{
+				document.forms["add"].submit();				
+			}
+
+		</script>
 
 	</head>
 	<body role="document">
@@ -58,22 +104,77 @@ $list = explode(",", $row["book_id"]);
 	    <!--end nav section-->
 
 		<!--<div class="container">-->
-		<div class="main">
-            <div class="container main-container">
-                <h1>Your Cart</h1>
-            </div>
-            <div name="books in cart">
-            	<?php 
-            	foreach($list as $arr)
-            	{
-            		$book = $arr[0];
-            		print $book;
-            		//$result = $link->query("SELECT * FROM books WHERE id='$book'");
-            	
-				}
-				 ?>
-            </div>
-        </div>
+		<?php 
+		if($page == 1)
+		{ ?>
+			<div class="main">
+            	<div class="container main-container">
+            	    <h1>Your Cart</h1>
+            	</div>
+            	<div name="books in cart">
+            		<?php 
+            		$count = count($list);
+            		$i = 0;
+            		while($i < $count)
+            		{
+            			$book = (int)$list[$i];
+            			$result = $link->query("SELECT * FROM book WHERE id='$book' ");
+            			$row = $result->fetch_assoc();
+            			$id = $row["id"];
+            			$title = $row["title"];
+            			$auth = $row["author"];
+            			$cat = $row["category"];
+            			print "<form name='books' method='post'>";
+							print "<p>";
+								print "<img src='images/sample.jpg' id='$id' display='inline'></div>";
+								print "<div id='title' name='title'><a href='book.php?id=$id'>$title</a></div>"; 
+								print "<div id='author' name='author'>$auth</div>";
+								print "<div id='category' name='category'>$cat</div>";
+							print "</p>";
+						print "</form>";
+						$i++;
+					}
+					 ?>
+            	</div>
+        	</div>
+        	<?php
+        }
+        else
+        { ?>
+        	<div class="main">
+            	<div class="container main-container">
+            	    <h1>Your Wishlist</h1>
+            	</div>
+            	<div name="books in cart">
+            		<?php 
+            		$count = count($list);
+            		$i = 0;
+            		while($i < $count)
+            		{
+            			$book = (int)$list[$i];
+            			$result = $link->query("SELECT * FROM book WHERE id='$book' ");
+            			$row = $result->fetch_assoc();
+            			$id = $row["id"];
+            			$title = $row["title"];
+            			$auth = $row["author"];
+            			$cat = $row["category"];
+            			print "<form name='add' method='post' action='list.php?cart=0'>";
+							print "<p>";
+								print "<img src='images/sample.jpg' id='$id' display='inline'></div>";
+								print "<div id='title' name='title'><a href='book.php?id=$id'>$title</a></div>"; 
+								print "<div id='author' name='author'>$auth</div>";
+								print "<div id='category' name='category'>$cat</div>";
+								print "<input type='hidden' name='book' value='$id'/>";
+								print "<input type='hidden' name='action' value='add'/>";
+								print "<button type='submit' class='btn btn-primary'>Add to Cart</button>";
+							print "</p>";
+						print "</form>";
+						$i++;
+					}
+					?>
+            	</div>
+        	</div> <?php
+        }?>
 
           <!--<div class="sidebar-module">
             <h4>Archives</h4>
