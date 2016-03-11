@@ -8,12 +8,6 @@ if ($link->connect_errno)
     exit();
 }
 
-if(isset($_REQUEST["action"]))
-	$action = $_REQUEST["action"];
-else
-	$action = "none";
-
-
 //read in text file if the book table is empty
 //help with reading in text file to database from http://forums.phpfreaks.com/topic/184172-inserting-data-into-a-mysql-table-from-a-text-file-using-php/
 $result = $link->query("SELECT count(title) FROM book");
@@ -29,10 +23,45 @@ if($row["count(title)"] == 0)
 	{
   		$line= explode(",", $list[$i]);
   		$sql = $link->query("INSERT INTO book(isbn, title, author, category, summary) 
-  			VALUES ('".$line[0]."', '".$line[1]."', '".$line[2]."', '".$line[3]."', '".$line[4]."') ");
+  			VALUES ('".trim(preg_replace('/\s+/', ' ', $line[0]))."', '".$line[1]."', '".$line[2]."', '".$line[3]."', '".$line[4]."') ");
   		$i++;
   	}
 }
+
+if(isset($_REQUEST["action"])){
+	$action = $_REQUEST["action"];
+	print($action);
+}
+else{
+	$action = "none";
+}
+
+if($action == "add_user")
+    {
+        $fname = $_POST["fname"];
+        $lname = $_POST["lname"];
+        $email = $_POST["email"];
+        $password = $_POST["password"];
+        
+        $fname = htmlentities($link->real_escape_string($fname));
+        $lname = htmlentities($link->real_escape_string($lname));
+        $email = htmlentities($link->real_escape_string($email));
+        $password = htmlentities($link->real_escape_string($password));
+        $password = crypt ($password,"Gryfindor");
+        $result = $link->query("INSERT INTO users (firstName,lastName,email,phrase,admin) VALUES ('$fname', '$lname', '$email', '$password', 0)");
+
+        $loggedIn = true;
+
+        if(!$result)
+            die ('Can\'t add user because: ' . $link->error);
+        else{
+        	if(!isset($_SESSION)){
+				session_start();
+			}
+            header('Location: main.php');
+        }
+    }
+
 
 ?>
 
@@ -53,8 +82,12 @@ if($row["count(title)"] == 0)
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
+		<!--local javascript files-->
+		<script src="js/main.js"></script>
+
 		<!-- local stylesheet-->
 		<link href="css/main.css" rel="stylesheet" />
+		<link href="css/modal.css" rel="stylesheet" />
 
 	</head>
 	<body role="document">
@@ -72,7 +105,7 @@ if($row["count(title)"] == 0)
 	        </div>
 	        <div id="navbar" class="navbar-collapse collapse">
 	          <ul class="nav navbar-nav pull-right">
-                <li role="presentation"><a class="cd-signin" href="#0"> Log In</a></li>
+                <li role="presentation"><a class="site-login" href="#"> Log In</a></li>
 
 	          </ul>
 	        </div><!--/.nav-collapse -->
@@ -87,30 +120,49 @@ if($row["count(title)"] == 0)
                     <h1>McGonagall Books</h1> 
                     <h4>The Book Shop with a Particular Proclivity for Pleasant Reads</h4>
                     <p class="lead "></p>
-                    <p><a class="btn btn-lg btn-success cd-signin" href="#0" role="button">Sign Up Today!</a></p>
+                    <p><a id="join-button" class="btn btn-lg btn-success site-signUp" href="#" role="button">Sign Up Today!</a></p>
                 </div>
             </div>
         </div>
 
-          <!--<div class="sidebar-module">
-            <h4>Archives</h4>
-            <ol class="list-unstyled">
-              <li><a href="#">November 2015</a></li>
-              <li><a href="#">December 2015</a></li>
-              <li><a href="#">January 2016</a></li>
-            </ol>
+        <div id="sign-in-modal" class="sign-in-modal">
+          	<div class="sign-in-modal-container">
+                <ul class="modal-switcher">
+                    <li><a href="#">Sign In</a></li>
+                    <li><a href="#">New Account</a></li>
+                </ul>
+                <div id="modal-login"> <!-- log in form -->
+                	<div id="loginError" role="alert" class="alert alert-danger modal-alert alert-hide"><p>That username and password did not match our records. Please, try again.<p></div>
+                    <form class="modal-form" name="signIn" onsubmit="return validateSignIn()" method="post" action="#">
+                    	<input type="hidden" name="action" value="login">
+                        <p class="fieldset"><label class="modal-label">Email:</label><input required class="modal-input" id="logInEmail" name="email" type="email" placeholder="E-mail"></p>
+                        <p class="fieldset"><label class="modal-label">Password:</label><input required class="modal-input" id="logInPassword" name="password" type="password"  placeholder="Password"></p>
+                        <p class="fieldset"><input class="modal-input" type="submit" value="Login"></p>
+                    </form>
+                </div>
+                <div id="modal-signup"> <!-- sign up form -->
+                    <form class="modal-form" name="signUp" onsubmit="return validateSignUp()" method="post" action="#">
+                    	<input type="hidden" name="action" value="add_user">
+                        <p class="fieldset"><label class="modal-label">First Name:</label><input required class="modal-input" id="fname" name="fname" type="text" placeholder="First Name"></p>
+                        <p class="fieldset"><label class="modal-label">Last Name:</label><input required class="modal-input" id="lname" name="lname" type="text" placeholder="Last Name"></p>
+                        <p class="fieldset"><label class="modal-label">Email:</label><input required class="modal-input" id="email" name="email" type="email" placeholder="E-mail"></p>
+                        <p class="fieldset"><label class="modal-label">Password:</label><input required class="modal-input" id="password" name="password" type="password"  placeholder="Password"></p>
+                        <p class="fieldset"><label id="pass2Label" class="modal-label">Enter Password Again:</label><input required class="modal-input" id="password2" name="password2" type="password"  placeholder="Retype Password"></p>
+                        <input class="modal-input" type="submit" value="Create Account">
+                    </form>
+                </div>
+            </div>
           </div>
-        <!--</div><!-- /.blog-sidebar -->
-
-			</div> <!--end div row-->
-
-		</div> <!--end div container-->
 
 		<footer class="footer"> <!-- take from footer example-->
 	      <div class="container footer-container">
 	        <p>McGonagall Books: Castle Ruins, Scotland</p>
 	      </div>
 	    </footer>
+
+	    <script>
+
+	    </script>
 
 	</body>
 </html>
