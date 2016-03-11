@@ -6,7 +6,6 @@ if ($link->connect_errno) {
     printf("Connect failed: %s\n", $link->connect_error);
     exit();
 }
-
 if(isset($_SESSION['user'])){
 	$email = $_SESSION["user"];
 	$password = $_SESSION[$email];
@@ -15,12 +14,24 @@ if(isset($_SESSION['user'])){
 	if($password != $row["password"]){
 		header('Location: index.php');
 	}
+}else{
+	header('Location: index.php');
 }
 
 if(isset($_REQUEST["action"]))
 	$action = $_REQUEST["action"];
 else
 	$action = "none";
+
+$email = $_SESSION["user"];
+$fullname="";
+$result = $link->query("SELECT first_name, last_name, id FROM users where email='$email'");
+$row = $result->fetch_assoc();
+$first = $row['first_name'];
+$last = $row['last_name'];
+$fullname = $first." ".$last;
+$userID = $row['id'];
+
 
 ?>
 
@@ -56,7 +67,7 @@ else
 			function drop(ev) {
 				ev.preventDefault();
 				var data = ev.dataTransfer.getData("text");
-				var data2 = 1;
+				var data2 = <?php print($userID);?>;
 				$.ajax({url: "ajax.php?id="+data+"&user="+data2, success: function(result){
 				}});
 			}
@@ -76,7 +87,7 @@ else
 	        </div>
 	        <div id="navbar" class="navbar-collapse collapse">
 	          <ul class="nav navbar-nav pull-right">
-                <li role="presentation"><a class="cd-signin" href="#0"> Welcome, ---</a></li>
+                <li role="presentation"><a class="cd-signin" href="#0"> Welcome, <?php print($fullname);?></a></li>
                 <li><a href="#"><span class="glyphicon glyphicon-shopping-cart" style="align:center;"></span> Cart <span class="badge nav-badge">4</span></a></li>
                 <li><a href="#"><span class="glyphicon glyphicon-star" style="align:center;"></span> WishList <span class="badge nav-badge">4</span></a></li>
                 <li><a href="logOut.php">Log Out</a></li>
@@ -90,8 +101,10 @@ else
 		<!--<div class="container">-->
 
 		<a href="list.html" class="btn btn-default">
+			<button>
         	<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true" ondrop="drop(event)" ondragover="allowDrop(event)"></span>
         	<!-- icon from http://glyphicons.com/ -->
+        	</button>
         </a>
 
 		<div class="main">
@@ -108,12 +121,12 @@ else
 						$cat = $row["category"];
 						$auth = $row["author"];?>
 						<form name="approve" method="post">
-							<p>
-								<img src="images/sample.jpg" id="<?php echo $row["id"] ?>" display="inline" draggable="true" ondragstart="drag(event)"></div>
+							<div>
+								<img src="images/brownBook.png" id="<?php echo $row["id"] ?>" width="8%" display="inline-block" draggable="true" ondragstart="drag(event)"></div>
 								<?php print "<div id='title' name='title'><a href='book.php?id=$id'>$title</a></div>"; 
 								print "<div id='author' name='author'>$auth</div>";
 								print "<div id='category' name='category'>$cat</div>";?>
-							</p>
+							</div>
 						</form>
 						<?php 
 						$i++;

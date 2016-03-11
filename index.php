@@ -14,8 +14,6 @@ if(isset($_SESSION['user'])){
 	$result = $link->query("SELECT password FROM users where email='$email'");
 	$row = $result->fetch_assoc();
 	if(($password == $row["password"])&&$password!=''){
-		print($_SESSION[$email]);
-		print($row['password']);
 		header('Location: main.php');
 	}
 }
@@ -46,7 +44,6 @@ if(isset($_REQUEST["action"])){
 else{
 	$action = "none";
 }
-
 
 
 if($action == "add_user")
@@ -90,9 +87,11 @@ if($action == "add_user")
             die ('Can\'t add user because: ' . $link->error);
         else
 			if(($password == $row["password"])&&$password!=''){
-				print($_SESSION[$email]);
-				print($row['password']);
+				$_SESSION['user'] = $email;
+				$_SESSION[$email] = $row['password'];
 				header('Location: main.php');
+			}else{
+				print("Failed");
 			}
 
     }
@@ -129,23 +128,29 @@ if($action == "add_user")
 				var email = document.getElementById('logInEmail').value
 				var password = document.getElementById('logInPassword').value
 				var error = document.getElementById('loginError')
-				if (email!=""){
+				/*if (email!=""){
 					if(password!=""){
-						return $.get('ajax.php?action=getPassword&&email='+email,function(data,status){
-							alert(data);
-							if(password!=data.password){
-								$("#loginError").slideDown("medium");
-								return false;
-							}else{
-								return false;
-							}
-						})
+						var result="";
+						var url = 'ajax.php?action=getPassword&email='
+						url = url + email+ '&pass='+password;
+						$.get(url,function(data,status){
+							alert('Status: ' + status);
+							alert('Data: ' + data);
+							result = data;
+						});
+						alert(result);
+						if(result=='true'){
+								return true;
+						}else{
+							$("#loginError").slideDown("medium");
+							return false;
+						}
 					}else{
 						return false;
 					}
 				}else{
 					return false;
-				}
+				}*/
 			}
 
 		</script>
@@ -198,7 +203,7 @@ if($action == "add_user")
                     	<input type="hidden" name="action" value="login">
                         <p class="fieldset"><label class="modal-label">Email:</label><input required class="modal-input" id="logInEmail" name="email" type="email" placeholder="E-mail"></p>
                         <p class="fieldset"><label class="modal-label">Password:</label><input required class="modal-input" id="logInPassword" name="password" type="password"  placeholder="Password"></p>
-                        <p class="fieldset"><input class="modal-input" type="submit" value="Login"></p>
+                        <input class="modal-input" type="submit" value="Login">
                     </form>
                 </div>
                 <div id="modal-signup"> <!-- sign up form -->
