@@ -156,6 +156,19 @@ if($action=="go")
 				<input type="hidden" name="action" value="go"/>
 				<p><button type="submit" class="btn btn-primary btn-lg"/>Submit</p>
 			</form>
+
+			<div id="submitted">
+				<!--<?php
+					$result = $link->query("SELECT * FROM review INNER JOIN users ON (review.user_id=users.id) HAVING book_id='$book_id' ORDER BY users.first_name");
+					while($row = $result->fetch_assoc())
+					{
+						$person = $row["users.first_name"];
+						$input = $row["review.input"];
+						print "<div id='thoughts'>$input</div>";
+						print "<div id='submitted_by'>Review By: $person</div>";
+					}
+				?>-->
+			</div>
         </div>
 
           <!--<div class="sidebar-module">
