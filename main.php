@@ -66,9 +66,12 @@ $userID = $row['id'];
 
 			function drop(ev) {
 				ev.preventDefault();
+				alert("Drop it like it's hot");
 				var data = ev.dataTransfer.getData("text");
+				alert(data);
 				var data2 = <?php print($userID);?>;
-				$.ajax({url: "ajax.php?id="+data+"&user="+data2, success: function(result){
+				$.ajax({url: "ajax.php?id="+data+"&user="+data2, success: function(data){
+					alert(data);
 				}});
 			}
 		</script>
@@ -110,30 +113,33 @@ $userID = $row['id'];
 		<div class="main">
             <div class="container main-container">
                 <h1>Test Main Page</h1>
-            </div>
-        	<div id=list>
-        		<?php 
-					$result = $link->query("SELECT * FROM book");
-					$i=0;
-					while($row = $result->fetch_assoc()):
-						$title = $row["title"];
-						$id = $row["id"];
-						$cat = $row["category"];
-						$auth = $row["author"];?>
-						<form name="approve" method="post">
-							<div>
-								<img src="images/brownBook.png" id="<?php echo $row["id"] ?>" width="8%" display="inline-block" draggable="true" ondragstart="drag(event)"></div>
-								<?php print "<div id='title' name='title'><a href='book.php?id=$id'>$title</a></div>"; 
-								print "<div id='author' name='author'>$auth</div>";
-								print "<div id='category' name='category'>$cat</div>";?>
-							</div>
-						</form>
+                <div id=list>
+	        		<?php 
+						$result = $link->query("SELECT * FROM book");
+						$i=0;
+						while($row = $result->fetch_assoc()){
+							$title = $row["title"];
+							$id = $row["id"];
+							$cat = $row["category"];
+							$auth = $row["author"];?>
+							<form name="approve" method="post">
+								<div>
+									<div>
+									<img src="images/brownBook.png" id="<?php echo $row["id"] ?>" width="8%" display="inline" draggable="true" ondragstart="drag(event)">
+									</div>
+									<div>
+										<?php print "<div id='title' name='title'><a href='book.php?id=$id'>$title</a></div>"; 
+										print "<div id='author' name='author'>$auth</div>";
+										print "<div id='category' name='category'>$cat</div>";?>
+									</div>
+								</div>
+							</form>
 						<?php 
-						$i++;
-					endwhile;
-				?>
-			</div>
-
+							}
+						?>
+				</div>
+            </div>
+            <div><h1>Test</h1></div>
           <div class="sidebar-module">
             <h4>Categories</h4>
             <form name="categories" method="post">

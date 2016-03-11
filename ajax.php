@@ -42,19 +42,22 @@
 		$result = $mysqli->query("SELECT * FROM shopping_cart WHERE user_id='".$user."'");
 		if(!$result){
 			$response = "Can't use query last name because: " . $mysqli->connect_errno . ':' . $mysqli->connect_error;
+			$result = $mysqli->query("INSERT into shopping_cart (user_id, book_id) values($user,$id)");
 		}else
 		{
 			$row = mysqli_fetch_assoc($result);
-			$cart = $row["book_id"];
-			if($cart == "0")
-				$cart .= "$id";
-			else
+			if(!$row['book_id']){
+				$result = $mysqli->query("INSERT into shopping_cart (user_id, book_id) values($user,$id)");
+			}else{
+				$cart = $row["book_id"];
 				$cart .= ",$id";
-			print $cart;
-			$result = $mysqli->query("UPDATE shopping_cart SET book_id='".$cart."' WHERE user_id='".$user."'");
+				print 'Stuff '.$cart;
+				print("UPDATE shopping_cart SET book_id=$cart WHERE user_id=$user");
+				$result = $mysqli->query("UPDATE shopping_cart SET book_id='$cart' WHERE user_id=$user");
+			}
 		}
 
-		print "success";
+		//$response= $id.' '.$user;
 		print $response;
 	}
 
