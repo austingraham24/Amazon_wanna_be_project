@@ -41,6 +41,23 @@ if($action=="go")
 	$rev = $_POST["review"];
 	$rev = htmlentities($link->real_escape_string($rev));
 	$result = $link->query("INSERT INTO review(user_id, book_id, input) VALUES ('$userID', '$book_id', '$rev')");
+}else if($action=="add")
+{
+	$wish = $_POST["book"];
+	$wish = htmlentities($link->real_escape_string($wish));
+	$result = $link->query("SELECT * FROM shopping_cart WHERE user_id='".$userID."'");
+	if(!$result)
+		$response = "Can't use query last name because: " . $link->connect_errno . ':' . $mysqli->connect_error;
+	else
+	{
+		$row = mysqli_fetch_assoc($result);
+		$cart = $row["book_id"];
+		if($cart == "0")
+			$cart = "$wish";
+		else
+			$cart .= ",$wish";
+		$result = $link->query("UPDATE shopping_cart SET book_id='".$cart."' WHERE user_id='".$userID."'");
+	}
 }
 
 ?>
@@ -130,6 +147,7 @@ if($action=="go")
 				$category = $row["category"];
 				$isbn = $row["isbn"];
 				$summary = $row["summary"];
+				$id = $row['id']
 			?>
 	            <div class="container main-container" style="margin-top:25px;">
 	            	<div style="display:inline-block; width:95px;">
@@ -144,6 +162,12 @@ if($action=="go")
 		            		ISBN: <?php echo $isbn ?><br/>
 		            		Summary: <?php echo $summary ?><br/>
 		            	</article>
+		            	<form name='books' method='post'>
+		            		<?php
+							print "<input type='hidden' name='book' value='$id'/>";
+							print "<input type='hidden' name='action' value='add'/>";
+							print "<button type='submit' class='btn btn-primary'>Add to Cart</button>";?>
+						</form>
 		            </div>
 		            <div id="rating" class="book_rating">
 		            	<br/>Rate this book!
