@@ -11,27 +11,37 @@
 	}
 	//===========================
 
-	$response = "";
-	
-	$id = $mysqli->real_escape_string($_GET["id"]);
-	$user = $mysqli->real_escape_string($_GET["user"]);
-	
-	$result = $mysqli->query("SELECT * FROM shopping_cart WHERE user_id='".$user."'");
-	if(!$result)
-		$response = "Can't use query last name because: " . $mysqli->connect_errno . ':' . $mysqli->connect_error;
-	else
-	{
-		$row = mysqli_fetch_assoc($result);
-		$cart = $row["book_id"];
-		if($cart == "0")
-			$cart .= "$id";
-		else
-			$cart .= ",$id";
-		print $cart;
-		$result = $mysqli->query("UPDATE shopping_cart SET book_id='".$cart."' WHERE user_id='".$user."'");
-	}
+	if(isset($_GET['action'])){
+		if($_GET['action']=='getPassword'){
+			$email=$_GET['email'];
+			$result = $mysqli->query("SELECT password FROM users where email='$email'");
+			$row = $result->fetch_assoc();
+			return $row['password'];
+		}
+	}else{
 
-	print "success";
-	print $response;
+		$response = "";
+		
+		$id = $mysqli->real_escape_string($_GET["id"]);
+		$user = $mysqli->real_escape_string($_GET["user"]);
+		
+		$result = $mysqli->query("SELECT * FROM shopping_cart WHERE user_id='".$user."'");
+		if(!$result)
+			$response = "Can't use query last name because: " . $mysqli->connect_errno . ':' . $mysqli->connect_error;
+		else
+		{
+			$row = mysqli_fetch_assoc($result);
+			$cart = $row["book_id"];
+			if($cart == "0")
+				$cart .= "$id";
+			else
+				$cart .= ",$id";
+			print $cart;
+			$result = $mysqli->query("UPDATE shopping_cart SET book_id='".$cart."' WHERE user_id='".$user."'");
+		}
+
+		print "success";
+		print $response;
+	}
 
 ?>

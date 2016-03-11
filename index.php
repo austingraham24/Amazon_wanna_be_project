@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 //connect to database
 $link = new mysqli("localhost","root","","amazon_db");
 if ($link->connect_errno) 
@@ -8,15 +8,15 @@ if ($link->connect_errno)
     exit();
 }
 
-print($_SESSION);
-
-if(isset($_SESSION)){
+if(isset($_SESSION['user'])){
 	$email = $_SESSION["user"];
-	$pass = $_SESSION[$email];
+	$password = $_SESSION[$email];
 	$result = $link->query("SELECT password FROM users where email='$email'");
-	print($result);
-	if($password == $result[0]){
-		print("yes");
+	$row = $result->fetch_assoc();
+	if(($password == $row["password"])&&$password!=''){
+		print($_SESSION[$email]);
+		print($row['password']);
+		header('Location: main.php');
 	}
 }
 
@@ -70,13 +70,31 @@ if($action == "add_user")
             die ('Can\'t add user because: ' . $link->error);
         else{
         	print("Adding");
-        	if(!isset($_SESSION)){
-				session_start();
-			}
 			$_SESSION["user"] = $email;
 			$_SESSION[$email] = $password;
             header('Location: main.php');
         }
+    }
+
+    if($action == "login")
+    {
+        $email = $_POST["email"];
+        $password = $_POST["password"];
+        
+        $email = htmlentities($link->real_escape_string($email));
+        $password = htmlentities($link->real_escape_string($password));
+        $password = crypt ($password,"Gryfindor");
+        $result = $link->query("SELECT password FROM users where email='$email'");
+		$row = $result->fetch_assoc();
+		if(!$result)
+            die ('Can\'t add user because: ' . $link->error);
+        else
+			if(($password == $row["password"])&&$password!=''){
+				print($_SESSION[$email]);
+				print($row['password']);
+				header('Location: main.php');
+			}
+
     }
 
 
@@ -105,6 +123,32 @@ if($action == "add_user")
 		<!-- local stylesheet-->
 		<link href="css/main.css" rel="stylesheet" />
 		<link href="css/modal.css" rel="stylesheet" />
+
+		<script>
+			function validateSignIn(){
+				var email = document.getElementById('logInEmail').value
+				var password = document.getElementById('logInPassword').value
+				var error = document.getElementById('loginError')
+				if (email!=""){
+					if(password!=""){
+						return $.get('ajax.php?action=getPassword&&email='+email,function(data,status){
+							alert(data);
+							if(password!=data.password){
+								$("#loginError").slideDown("medium");
+								return false;
+							}else{
+								return false;
+							}
+						})
+					}else{
+						return false;
+					}
+				}else{
+					return false;
+				}
+			}
+
+		</script>
 
 	</head>
 	<body role="document">

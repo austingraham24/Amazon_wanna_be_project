@@ -1,18 +1,3 @@
-function validateSignIn(){
-	var email = document.getElementById('logInEmail').value
-	var password = document.getElementById('logInPassword').value
-	var error = document.getElementById('loginError')
-	if (email!=""){
-		if(password!=""){
-			$("#loginError").slideDown("medium");
-			return false;
-		}else{
-			return false;
-		}
-	}else{
-		return false;
-	}
-}
 
 function validateSignUp(){
 	var firstname = document.getElementById('fname').value
