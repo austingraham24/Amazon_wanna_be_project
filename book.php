@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 $link = new mysqli("localhost","root","","amazon_db");
 if ($link->connect_errno) 
@@ -7,8 +8,28 @@ if ($link->connect_errno)
     exit();
 }
 
+if(isset($_SESSION['user'])){
+	$email = $_SESSION["user"];
+	$password = $_SESSION[$email];
+	$result = $link->query("SELECT password FROM users where email='$email'");
+	$row = $result->fetch_assoc();
+	if($password != $row["password"]){
+		header('Location: index.php');
+	}
+}else{
+	header('Location: index.php');
+}
+
+$email = $_SESSION["user"];
+$fullname="";
+$result = $link->query("SELECT first_name, last_name, id FROM users where email='$email'");
+$row = $result->fetch_assoc();
+$first = $row['first_name'];
+$last = $row['last_name'];
+$fullname = $first." ".$last;
+$userID = $row['id'];
+
 $book_id = $_GET['id'];
-$user = 1;
 
 if(isset($_REQUEST["action"]))
 	$action = $_REQUEST["action"];
@@ -17,10 +38,9 @@ else
 
 if($action=="go")
 {
-	$user = 1;
 	$rev = $_POST["review"];
 	$rev = htmlentities($link->real_escape_string($rev));
-	$result = $link->query("INSERT INTO review(user_id, book_id, input) VALUES ('$user', '$book_id', '$rev')");
+	$result = $link->query("INSERT INTO review(user_id, book_id, input) VALUES ('$userID', '$book_id', '$rev')");
 }
 
 ?>
@@ -64,10 +84,11 @@ if($action=="go")
 
  			$(function () {
  				var book = "<?php echo $book_id; ?>";
- 				var user = "<?php echo $user; ?>";
+ 				var user = "<?php echo $userID; ?>";
   				$("#rateYo").rateYo()
               	.on("rateyo.set", function (e, data) {
-              		$.ajax({url: "ajax2.php?id="+book+"&user="+user+"&rate="+data.rating, success: function(result){}});
+              		$.ajax({url: "ajax2.php?id="+book+"&user="+user+"&rate="+data.rating, success: function(result){
+              		}});
               	});
 			});
 
@@ -84,11 +105,14 @@ if($action=="go")
 	            <span class="icon-bar"></span>
 	            <span class="icon-bar"></span>
 	          </button>
-	          <a class="navbar-brand" href="#">McGonagall Books</a>
+	          <a class="navbar-brand" href="index.php">McGonagall Books</a>
 	        </div>
 	        <div id="navbar" class="navbar-collapse collapse">
 	          <ul class="nav navbar-nav pull-right">
-                <li role="presentation"><a class="cd-signin" href="#0"> Log In</a></li>
+                <li role="presentation">Welcome, <?php print($fullname);?></li>
+                <li><a href="list.php?cart=1"><span class="glyphicon glyphicon-shopping-cart" style="align:center;"></span> Cart <span class="badge nav-badge">4</span></a></li>
+                <li><a href="list.php?cart=0"><span class="glyphicon glyphicon-star" style="align:center;"></span> WishList <span class="badge nav-badge">4</span></a></li>
+                <li><a href="logOut.php">Log Out</a></li>
 
 	          </ul>
 	        </div><!--/.nav-collapse -->

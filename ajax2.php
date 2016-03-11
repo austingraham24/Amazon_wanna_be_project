@@ -17,7 +17,7 @@
 	$user = $mysqli->real_escape_string($_GET["user"]);
 	$rating = $mysqli->real_escape_string($_GET["rate"]);
 	
-	$result = $mysqli->query("INSERT INTO rating(book_id, rating, user_id) VALUES('$id', '$user', '$rating')");
+	$result = $mysqli->query("INSERT INTO rating(book_id, rating, user_id) VALUES('$id', '$rating', '$user')");
 	if(!$result)
 		$response = "Can't use query last name because: " . $mysqli->connect_errno . ':' . $mysqli->connect_error;
 
