@@ -51,10 +51,15 @@
 			}else{
 				$cart = $row["book_id"];
 				$cart .= ",$id";
-				print 'Stuff '.$cart;
-				print("UPDATE shopping_cart SET book_id=$cart WHERE user_id=$user");
+				//print 'Stuff '.$cart;
+				//print("UPDATE shopping_cart SET book_id=$cart WHERE user_id=$user");
 				$result = $mysqli->query("UPDATE shopping_cart SET book_id='$cart' WHERE user_id=$user");
 			}
+
+			$result = $mysqli->query("SELECT book_id from shopping_cart WHERE user_id=$user");
+			$row = $result->fetch_assoc();
+			$list = explode(",", $row["book_id"]);
+			
 		}
 
 		//$response= $id.' '.$user;
