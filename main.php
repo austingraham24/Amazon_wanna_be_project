@@ -146,7 +146,7 @@ else
 	            </div>
 
 	          </div>
-                <h1>Test Main Page</h1>
+                <h1>Book Shop</h1>
                 <div id=list>
 	        		<?php 
 	        			if($selected == " ")

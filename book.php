@@ -132,8 +132,11 @@ if($action=="go")
 				$summary = $row["summary"];
 			?>
             <div class="container main-container">
-                <h1><?php echo $title ?></h1>
-                <h3>By: <?php echo $author ?></h3>
+            	<img src="images/brownBook.png" width="10%" display="inline-block">
+            	<div display="inline-block">
+	                <h1 ><?php echo $title ?></h1>
+	                <h3>By: <?php echo $author ?></h3>
+            	</div>
             </div>
             <div name="book info">
             	<article>
