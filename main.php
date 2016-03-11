@@ -33,6 +33,26 @@ $fullname = $first." ".$last;
 $userID = $row['id'];
 
 
+if($action=="add")
+{
+	$wish = $_POST["book"];
+	$wish = htmlentities($link->real_escape_string($wish));
+	$result = $link->query("SELECT * FROM wish_list WHERE user_id='".$userID."'");
+	if(!$result)
+		$response = "Can't use query last name because: " . $mysqli->connect_errno . ':' . $mysqli->connect_error;
+	else
+	{
+		$row = mysqli_fetch_assoc($result);
+		$cart = $row["book_id"];
+		if($cart == "0")
+			$cart = "$wish";
+		else
+			$cart .= ",$wish";
+		$result = $link->query("UPDATE wish_list SET book_id='".$cart."' WHERE user_id='".$userID."'");
+	}
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -91,8 +111,8 @@ $userID = $row['id'];
 	        <div id="navbar" class="navbar-collapse collapse">
 	          <ul class="nav navbar-nav pull-right">
                 <li role="presentation"><a class="cd-signin" href="#0"> Welcome, <?php print($fullname);?></a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-shopping-cart" style="align:center;"></span> Cart <span class="badge nav-badge">4</span></a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-star" style="align:center;"></span> WishList <span class="badge nav-badge">4</span></a></li>
+                <li><a href="list.php?cart=1"><span class="glyphicon glyphicon-shopping-cart" style="align:center;"></span> Cart <span class="badge nav-badge">4</span></a></li>
+                <li><a href="list.php?cart=0"><span class="glyphicon glyphicon-star" style="align:center;"></span> WishList <span class="badge nav-badge">4</span></a></li>
                 <li><a href="logOut.php">Log Out</a></li>
 
 	          </ul>
@@ -122,7 +142,7 @@ $userID = $row['id'];
 							$id = $row["id"];
 							$cat = $row["category"];
 							$auth = $row["author"];?>
-							<form name="approve" method="post">
+							<form name="approve" method="post" action="main.php">
 								<div>
 									<div>
 									<img src="images/brownBook.png" id="<?php echo $row["id"] ?>" width="8%" display="inline" draggable="true" ondragstart="drag(event)">
@@ -130,7 +150,10 @@ $userID = $row['id'];
 									<div>
 										<?php print "<div id='title' name='title'><a href='book.php?id=$id'>$title</a></div>"; 
 										print "<div id='author' name='author'>$auth</div>";
-										print "<div id='category' name='category'>$cat</div>";?>
+										print "<div id='category' name='category'>$cat</div>";
+										print "<input type='hidden' name='book' value='$id'/>";
+										print "<input type='hidden' name='action' value='add'/>";
+										print "<button type='submit' class='btn btn-primary'>Add to Wishlist</button>";?>
 									</div>
 								</div>
 							</form>
