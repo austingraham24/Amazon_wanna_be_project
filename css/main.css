@@ -77,6 +77,15 @@
   color:#fff;
 }
 
+#bookListing a{
+  text-decoration:underline;
+  color:#000;
+}
+
+.sidebar-module{
+  margin-right:50px;
+}
+
 /*
 .text {
     opacity: 1;

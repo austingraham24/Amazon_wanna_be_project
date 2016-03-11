@@ -86,13 +86,13 @@ $userID = $row['id'];
 	            <span class="icon-bar"></span>
 	            <span class="icon-bar"></span>
 	          </button>
-	          <a class="navbar-brand" href="index.html">McGonagall Books</a>
+	          <a class="navbar-brand" href="index.php">McGonagall Books</a>
 	        </div>
 	        <div id="navbar" class="navbar-collapse collapse">
 	          <ul class="nav navbar-nav pull-right">
                 <li role="presentation"><a class="cd-signin" href="#0"> Welcome, <?php print($fullname);?></a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-shopping-cart" style="align:center;"></span> Cart <span class="badge nav-badge">4</span></a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-star" style="align:center;"></span> WishList <span class="badge nav-badge">4</span></a></li>
+                <li><a href="list.php?cart=1"><span class="glyphicon glyphicon-shopping-cart" style="align:center;"></span> Cart <span class="badge nav-badge">4</span></a></li>
+                <li><a href="list.php?cart=0"><span class="glyphicon glyphicon-star" style="align:center;"></span> WishList <span class="badge nav-badge">4</span></a></li>
                 <li><a href="logOut.php">Log Out</a></li>
 
 	          </ul>
@@ -103,15 +103,27 @@ $userID = $row['id'];
 
 		<!--<div class="container">-->
 
-		<a href="list.html" class="btn btn-default">
-			<button>
-        	<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true" ondrop="drop(event)" ondragover="allowDrop(event)"></span>
-        	<!-- icon from http://glyphicons.com/ -->
-        	</button>
-        </a>
-
 		<div class="main">
             <div class="container main-container">
+            	<div class="sidebar-module" style="margin-top:25px;float:right;">
+	            <h4>Categories</h4>
+	            <form name="categories" method="post">
+	            	<?php
+	            	$result = $link->query("SELECT DISTINCT category FROM book");
+	            	while($row = $result->fetch_assoc()):
+	            		$go = $row["category"];
+	            		print "<div id='row'>$go</div>";
+	            	endwhile;
+	            	?>
+	            </form>
+	            <br/><br/>
+	            <div class="well" aria-hidden="true" ondrop="drop(event)" ondragover="allowDrop(event)">
+	            	<p>Drag and Drop to add to cart!</p>
+	            	<span class="glyphicon glyphicon-shopping-cart" style="font-size:5em; color:#595959; margin-left:25%;"></span>
+
+	            </div>
+
+	          </div>
                 <h1>Test Main Page</h1>
                 <div id=list>
 	        		<?php 
@@ -123,7 +135,7 @@ $userID = $row['id'];
 							$cat = $row["category"];
 							$auth = $row["author"];?>
 							<form name="approve" method="post">
-								<div style="margin-bottom:25px;">
+								<div id="bookListing" style="margin-bottom:25px;">
 									<div style="display:inline-block; width:95px;;">
 									<img src="images/brownBook.png" id="<?php echo $row["id"] ?>" width="100%" display="inline" draggable="true" ondragstart="drag(event)">
 									</div>
@@ -139,24 +151,7 @@ $userID = $row['id'];
 						?>
 				</div>
             </div>
-            <div><h1>Test</h1></div>
-          <div class="sidebar-module">
-            <h4>Categories</h4>
-            <form name="categories" method="post">
-            	<?php
-            	$result = $link->query("SELECT DISTINCT category FROM book");
-            	while($row = $result->fetch_assoc()):
-            		$go = $row["category"];
-            		print "<div id='row'>$go</div>";
-            	endwhile;
-            	?>
-            </form>
-          </div>
-        </div><!-- /.blog-sidebar -->
-
-			</div> <!--end div row-->
-
-		</div> <!--end div container-->
+        </div>
 
 		<footer class="footer"> <!-- take from footer example-->
 	      <div class="container footer-container">
