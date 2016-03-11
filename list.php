@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 $link = new mysqli("localhost","root","","amazon_db");
 if ($link->connect_errno) 
@@ -7,19 +8,40 @@ if ($link->connect_errno)
     exit();
 }
 
+if(isset($_SESSION['user'])){
+	$email = $_SESSION["user"];
+	$password = $_SESSION[$email];
+	$result = $link->query("SELECT password FROM users where email='$email'");
+	$row = $result->fetch_assoc();
+	if($password != $row["password"]){
+		header('Location: index.php');
+	}
+}else{
+	header('Location: index.php');
+}
+
+$email = $_SESSION["user"];
+$fullname="";
+$result = $link->query("SELECT first_name, last_name, id FROM users where email='$email'");
+$row = $result->fetch_assoc();
+$first = $row['first_name'];
+$last = $row['last_name'];
+$fullname = $first." ".$last;
+$userID = $row['id'];
+
 //check if wishlist or cart page, and grab user id
 $page = $_GET["cart"];
 $user = 1;
 
 if($page == 1)
 {
-	$result = $link->query("SELECT * FROM shopping_cart WHERE user_id = $user");
+	$result = $link->query("SELECT * FROM shopping_cart WHERE user_id = $userID");
 	$row = $result->fetch_assoc();
 	$list = explode(",", $row["book_id"]);
 }
 else
 {
-	$result = $link->query("SELECT * FROM wish_list WHERE user_id = $user");
+	$result = $link->query("SELECT * FROM wish_list WHERE user_id = $userID");
 	$row = $result->fetch_assoc();
 	$list = explode(",", $row["book_id"]);
 }
@@ -33,7 +55,7 @@ if($action=="add")
 {
 	$wish = $_POST["book"];
 	$wish = htmlentities($link->real_escape_string($wish));
-	$result = $link->query("SELECT * FROM shopping_cart WHERE user_id='".$user."'");
+	$result = $link->query("SELECT * FROM shopping_cart WHERE user_id='".$userID."'");
 	if(!$result)
 		$response = "Can't use query last name because: " . $mysqli->connect_errno . ':' . $mysqli->connect_error;
 	else
@@ -44,7 +66,7 @@ if($action=="add")
 			$cart = "$wish";
 		else
 			$cart .= ",$wish";
-		$result = $link->query("UPDATE shopping_cart SET book_id='".$cart."' WHERE user_id='".$user."'");
+		$result = $link->query("UPDATE shopping_cart SET book_id='".$cart."' WHERE user_id='".$userID."'");
 	}
 }
 
@@ -91,11 +113,14 @@ if($action=="add")
 	            <span class="icon-bar"></span>
 	            <span class="icon-bar"></span>
 	          </button>
-	          <a class="navbar-brand" href="main.php">McGonagall Books</a>
+	          <a class="navbar-brand" href="index.php">McGonagall Books</a>
 	        </div>
 	        <div id="navbar" class="navbar-collapse collapse">
 	          <ul class="nav navbar-nav pull-right">
-                <li role="presentation"><a class="cd-signin" href="#0"> Log In</a></li>
+                <li role="presentation"><a class="cd-signin" href="#0"> Welcome, <?php print($fullname);?></a></li>
+                <li><a href="list.php?cart=1"><span class="glyphicon glyphicon-shopping-cart" style="align:center;"></span> Cart <span class="badge nav-badge">4</span></a></li>
+                <li><a href="list.php?cart=0"><span class="glyphicon glyphicon-star" style="align:center;"></span> WishList <span class="badge nav-badge">4</span></a></li>
+                <li><a href="logOut.php">Log Out</a></li>
 
 	          </ul>
 	        </div><!--/.nav-collapse -->
@@ -110,8 +135,7 @@ if($action=="add")
 			<div class="main">
             	<div class="container main-container">
             	    <h1>Your Cart</h1>
-            	</div>
-            	<div name="books in cart">
+            	    <div name="books in cart">
             		<?php 
             		$count = count($list);
             		$i = 0;
@@ -124,17 +148,27 @@ if($action=="add")
             			$title = $row["title"];
             			$auth = $row["author"];
             			$cat = $row["category"];
-            			print "<form name='books' method='post'>";
-							print "<p>";
-								print "<img src='images/sample.jpg' id='$id' display='inline'></div>";
-								print "<div id='title' name='title'><a href='book.php?id=$id'>$title</a></div>"; 
-								print "<div id='author' name='author'>$auth</div>";
-								print "<div id='category' name='category'>$cat</div>";
-							print "</p>";
-						print "</form>";
+            			?>
+            			<form name='books' method='post'>
+							<div id="bookListing" style="margin-bottom:25px;">
+								<div style="display:inline-block; width:100px;">
+								<img src="images/brownBook.png" id="<?php echo $row["id"] ?>" width="100%" style="vertical-align:bottom;" display="inline" draggable="true" ondragstart="drag(event)">
+								</div>
+								<div style="display:inline-block; font-size:18px; margin-left:15px; vertical-align:bottom;">
+									<?php print "<div id='title' name='title'><a href='book.php?id=$id'>$title</a></div>"; 
+									print "<div id='author' name='author'>$auth</div>";
+									print "<div id='category' name='category'>$cat</div>";
+									print "<input type='hidden' name='book' value='$id'/>";
+									print "<input type='hidden' name='action' value='add'/>";
+									print "<button type='submit' class='btn btn-primary'>Add to Wishlist</button>";?>
+								</div>
+							</div>
+						</form>
+						<?php
 						$i++;
 					}
 					 ?>
+            	</div>
             	</div>
         	</div>
         	<?php
@@ -144,8 +178,7 @@ if($action=="add")
         	<div class="main">
             	<div class="container main-container">
             	    <h1>Your Wishlist</h1>
-            	</div>
-            	<div name="books in cart">
+            	    <div name="books in wishlist">
             		<?php 
             		$count = count($list);
             		$i = 0;
@@ -172,6 +205,7 @@ if($action=="add")
 						$i++;
 					}
 					?>
+            	</div>
             	</div>
         	</div> <?php
         }?>
