@@ -156,10 +156,10 @@ if($action=="add")
 							$auth = $row["author"];?>
 							<form name="approve" method="post">
 								<div id="bookListing" style="margin-bottom:25px;">
-									<div style="display:inline-block; width:95px;;">
-									<img src="images/brownBook.png" id="<?php echo $row["id"] ?>" width="100%" display="inline" draggable="true" ondragstart="drag(event)">
+									<div style="display:inline-block; width:100px;">
+									<img src="images/brownBook.png" id="<?php echo $row["id"] ?>" width="100%" style="vertical-align:bottom;" display="inline" draggable="true" ondragstart="drag(event)">
 									</div>
-									<div style="display:inline-block; font-size:18px; margin-left:15px;">
+									<div style="display:inline-block; font-size:18px; margin-left:15px; vertical-align:bottom;">
 										<?php print "<div id='title' name='title'><a href='book.php?id=$id'>$title</a></div>"; 
 										print "<div id='author' name='author'>$auth</div>";
 										print "<div id='category' name='category'>$cat</div>";
