@@ -52,6 +52,10 @@ if($action=="add")
 	}
 }
 
+if(isset($_GET["cat"]))
+	$selected = $_GET["cat"];
+else
+	$selected = " ";
 
 ?>
 
@@ -127,13 +131,14 @@ if($action=="add")
             <div class="container main-container">
             	<div class="sidebar-module" style="margin-top:25px;float:right;">
 	            <h4>Categories</h4>
-	            <form name="categories" method="post">
+	            <form name="categories" method="post" action="main.php">
 	            	<?php
 	            	$result = $link->query("SELECT DISTINCT category FROM book");
 	            	while($row = $result->fetch_assoc()):
 	            		$go = $row["category"];
-	            		print "<div id='row'>$go</div>";
+	            		print "<div class='link' id='row'><a href='main.php?cat=$go'>$go</a></div>";
 	            	endwhile;
+	            	print "<div id='row'><a href='main.php'>All Categories</a></div>";
 	            	?>
 	            </form>
 	            <br/><br/>
@@ -147,30 +152,62 @@ if($action=="add")
                 <h1>Test Main Page</h1>
                 <div id=list>
 	        		<?php 
-						$result = $link->query("SELECT * FROM book");
-						$i=0;
-						while($row = $result->fetch_assoc()){
-							$title = $row["title"];
-							$id = $row["id"];
-							$cat = $row["category"];
-							$auth = $row["author"];?>
-							<form name="approve" method="post">
-								<div id="bookListing" style="margin-bottom:25px;">
-									<div style="display:inline-block; width:95px;;">
-									<img src="images/brownBook.png" id="<?php echo $row["id"] ?>" width="100%" display="inline" draggable="true" ondragstart="drag(event)">
+	        			if($selected == " ")
+	        			{
+	        				$result = $link->query("SELECT * FROM book");
+							$i=0;
+							while($row = $result->fetch_assoc())
+							{
+								$title = $row["title"];
+								$id = $row["id"];
+								$cat = $row["category"];
+								$auth = $row["author"];?>
+								<form name="approve" method="post">
+									<div id="bookListing" style="margin-bottom:25px;">
+										<div style="display:inline-block; width:95px;;">
+										<img src="images/brownBook.png" id="<?php echo $row["id"] ?>" width="100%" display="inline" draggable="true" ondragstart="drag(event)">
+										</div>
+										<div style="display:inline-block; font-size:18px; margin-left:15px;">
+											<?php print "<div id='title' name='title'><a href='book.php?id=$id'>$title</a></div>"; 
+											print "<div id='author' name='author'>$auth</div>";
+											print "<div id='category' name='category'>$cat</div>";
+											print "<input type='hidden' name='book' value='$id'/>";
+											print "<input type='hidden' name='action' value='add'/>";
+											print "<button type='submit' class='btn btn-primary'>Add to Wishlist</button>";?>
+										</div>
 									</div>
-									<div style="display:inline-block; font-size:18px; margin-left:15px;">
-										<?php print "<div id='title' name='title'><a href='book.php?id=$id'>$title</a></div>"; 
-										print "<div id='author' name='author'>$auth</div>";
-										print "<div id='category' name='category'>$cat</div>";
-										print "<input type='hidden' name='book' value='$id'/>";
-										print "<input type='hidden' name='action' value='add'/>";
-										print "<button type='submit' class='btn btn-primary'>Add to Wishlist</button>";?>
-									</div>
-								</div>
-							</form>
-						<?php 
+								</form>
+								<?php 
 							}
+	        			}
+	        			else
+	        			{
+							$result = $link->query("SELECT * FROM book WHERE category='$selected'");
+							$i=0;
+							while($row = $result->fetch_assoc())
+							{
+								$title = $row["title"];
+								$id = $row["id"];
+								$cat = $row["category"];
+								$auth = $row["author"];?>
+								<form name="approve" method="post">
+									<div id="bookListing" style="margin-bottom:25px;">
+										<div style="display:inline-block; width:95px;;">
+										<img src="images/brownBook.png" id="<?php echo $row["id"] ?>" width="100%" display="inline" draggable="true" ondragstart="drag(event)">
+										</div>
+										<div style="display:inline-block; font-size:18px; margin-left:15px;">
+											<?php print "<div id='title' name='title'><a href='book.php?id=$id'>$title</a></div>"; 
+											print "<div id='author' name='author'>$auth</div>";
+											print "<div id='category' name='category'>$cat</div>";
+											print "<input type='hidden' name='book' value='$id'/>";
+											print "<input type='hidden' name='action' value='add'/>";
+											print "<button type='submit' class='btn btn-primary'>Add to Wishlist</button>";?>
+										</div>
+									</div>
+								</form>
+								<?php 
+							}
+						}
 						?>
 				</div>
             </div>
