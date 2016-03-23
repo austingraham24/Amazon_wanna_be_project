@@ -44,11 +44,14 @@ if($action=="add")
 	{
 		$row = mysqli_fetch_assoc($result);
 		$cart = $row["book_id"];
-		if($cart == "0")
+		if(!$row["book_id"]){
 			$cart = "$wish";
-		else
+			$result = $link->query("INSERT into wish_list (user_id,book_id) values($userID,$cart)");
+		}
+		else{
 			$cart .= ",$wish";
-		$result = $link->query("UPDATE wish_list SET book_id='".$cart."' WHERE user_id='".$userID."'");
+			$result = $link->query("UPDATE wish_list SET book_id='".$cart."' WHERE user_id='".$userID."'");
+		}
 	}
 }
 

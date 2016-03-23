@@ -62,6 +62,7 @@ if($action=="addWishList")
 	{
 		$row = mysqli_fetch_assoc($result);
 		if(!$row['book_id']){
+			print("stuff");
 			$result = $link->query("INSERT into wish_list (book_id,user_id) values ($wish, $userID)");
 		}else{
 			$cart = $row["book_id"];
@@ -85,11 +86,14 @@ if($action=="add")
 	{
 		$row = mysqli_fetch_assoc($result);
 		$cart = $row["book_id"];
-		if($cart == "0")
+		if(!$row["book_id"]){
 			$cart = "$wish";
-		else
+			$result = $link->query("INSERT into shopping_cart (user_id,book_id) values($userID,$cart)");
+		}
+		else{
 			$cart .= ",$wish";
-		$result = $link->query("UPDATE shopping_cart SET book_id='".$cart."' WHERE user_id='".$userID."'");
+			$result = $link->query("UPDATE shopping_cart SET book_id='".$cart."' WHERE user_id='".$userID."'");
+		}
 	}
 }
 

@@ -180,21 +180,28 @@ if($action=="go")
 						<input type="hidden" name="action" value="go"/>
 						<input type="submit" class="btn btn-primary btn-lg" value="Submit"/>
 					</form>
+
+					<h2 style="margin-top:20px;">Reader Reviews:</h2>
+
+					<div id="submitted" style='margin-bottom:50px;'>
+						<?php
+							$result = $link->query("SELECT * FROM review INNER JOIN users ON (review.user_id=users.id) HAVING book_id='$book_id' ORDER BY users.first_name");
+							while($row = $result->fetch_assoc())
+							{
+								$person = $row["first_name"];
+								$last = $row["last_name"];
+								$input = $row["input"];
+								print "<div class='well'>";
+								print "<div id='thoughts'>$input</div>";
+								print "<div id='submitted_by'>Review By: $person $last</div>";
+								print "</div>";
+							}
+						?>
+					</div>
+
 	            </div>
 
-	            <div id="submitted">
-				<?php
-					$result = $link->query("SELECT * FROM review INNER JOIN users ON (review.user_id=users.id) HAVING book_id='$book_id' ORDER BY users.first_name");
-					while($row = $result->fetch_assoc())
-					{
-						$person = $row["first_name"];
-						$last = $row["last_name"];
-						$input = $row["input"];
-						print "<div id='thoughts'>$input</div>";
-						print "<div id='submitted_by'>Review By: $person $last</div>";
-					}
-				?>
-			</div>
+	            
         </div>
 
           <!--<div class="sidebar-module">
